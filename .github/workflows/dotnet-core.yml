@@ -23,15 +23,10 @@ jobs:
       
     - name: Build
       run: dotnet build --configuration Release --no-restore
-       
-    - name: Publish Lib
-      uses: brandedoutcast/publish-nuget@v2.5.5
-      with:
-          PROJECT_FILE_PATH: BuranCore.Library/BuranCore.Library.csproj
-          NUGET_KEY: ${{secrets.NUGETAPI}}
-          
-    - name: Publish Mvc
-      uses: brandedoutcast/publish-nuget@v2.5.5
-      with:
-          PROJECT_FILE_PATH: BuranCore.MvcLibrary/BuranCore.MvcLibrary.csproj
-          NUGET_KEY: ${{secrets.NUGETAPI}}
+    
+    - name: Pack
+      run: dotnet pack --configuration Release
+     
+    - name: Publish
+      run: dotnet nuget push "**/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGETAPI}} --skip-duplicate --no-symbols true
+     
