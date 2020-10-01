@@ -28,13 +28,13 @@ jobs:
       run: dotnet pack --configuration Release
     
     - name: Publish Lib
-      uses: brandedoutcast/publish-nuget@v2.5.2
+      uses: brandedoutcast/publish-nuget@v2.5.5
       with:
           PROJECT_FILE_PATH: BuranCore.Library/BuranCore.Library.csproj
           NUGET_KEY: ${{secrets.NUGETAPI}}
           
     - name: Publish Mvc
-      uses: brandedoutcast/publish-nuget@v2.5.2
+      uses: brandedoutcast/publish-nuget@v2.5.5
       with:
           PROJECT_FILE_PATH: BuranCore.MvcLibrary/BuranCore.MvcLibrary.csproj
           NUGET_KEY: ${{secrets.NUGETAPI}}
