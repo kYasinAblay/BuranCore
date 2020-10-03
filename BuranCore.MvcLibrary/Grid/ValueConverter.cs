@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Web;
+using Buran.Core.Library.Utils;
 
 namespace Buran.Core.MvcLibrary.Grid
 {
@@ -45,14 +46,10 @@ namespace Buran.Core.MvcLibrary.Grid
         public static object InspectDataFormat(object item, DataColumn field, string dataFormat = null)
         {
             if (field.EditorType == ColumnTypes.Link)
-            {
                 dataFormat = HttpUtility.UrlDecode(dataFormat);
-            }
 
             if (string.IsNullOrWhiteSpace(dataFormat))
-            {
                 dataFormat = field.DataFormat;
-            }
 
             if (string.IsNullOrWhiteSpace(dataFormat))
             {
@@ -99,6 +96,12 @@ namespace Buran.Core.MvcLibrary.Grid
                     }
                 }
             }
+            return val;
+        }
+
+        public static bool GetCheckedValue(object item, string field)
+        {
+            var val = (bool)Digger.GetObjectValue(item, field);
             return val;
         }
 
@@ -173,14 +176,20 @@ namespace Buran.Core.MvcLibrary.Grid
             #region CHECKBOX
             else if (field.EditorType == ColumnTypes.CheckBox)
             {
+                var col = field as CheckBoxColumn;
+
                 var val = InspectDataFormat(item, field);
                 if (val == null)
-                {
                     return r;
+
+                var checkState = string.Empty;
+                if (!col.CheckedField.IsEmpty())
+                {
+                    if (GetCheckedValue(item, col.CheckedField))
+                        checkState = " checked='checked'";
                 }
 
-                r += "<input name='select-" + field.FieldName +
-                    "' id='select-" + field.FieldName + "' type='checkbox' value='" + val + "'/>";
+                r += $"<input name='select-{field.FieldName}' id='select-{field.FieldName}' type='checkbox' value='{val}' {checkState}/>";
             }
             #endregion
             else

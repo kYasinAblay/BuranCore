@@ -202,33 +202,6 @@ namespace Buran.Core.MvcLibrary.Grid
             return new HtmlString(writer.GetString());
         }
 
-        //        private static string RenderHeaderBar(DataGridOptions option)
-        //        {
-        //            var builder = new HtmlContentBuilder();
-        //            var printHeader = option.HeaderButtons.Count > 0;
-        //            if (!printHeader)
-        //            {
-        //                return string.Empty;
-        //            }
-
-        //            builder.AppendHtml($"<tr><th class='actions-header' colspan='{_colCount}'>");
-        //            builder.AppendHtml($@"<div class='actions pull-left'>
-        //<div class='btn-group'>
-        //    <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
-        //    {Text.HeaderButtonText} <span class='caret'></span>
-        //</button>
-        //<ul class='dropdown-menu'>");
-        //            if (option.HeaderButtons.Count > 0)
-        //            {
-        //                foreach (var button in option.HeaderButtons)
-        //                {
-        //                    builder.AppendHtml($"<li>{button.ToString()}</li>");
-        //                }
-        //            }
-        //            builder.AppendHtml("</ul></div></div></th></tr>");
-        //            return builder.GetString();
-        //        }
-
         private static string RenderHeaderBar2(DataGridOptions option)
         {
             var builder = new HtmlContentBuilder();
