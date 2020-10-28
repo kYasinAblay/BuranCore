@@ -35,6 +35,8 @@ namespace Buran.Core.MvcLibrary.Extenders
         [HtmlAttributeName("brn-option-label")]
         public string OptionLabel { get; set; }
 
+        [HtmlAttributeName("brn-cssclass")]
+        public string CssClass { get; set; }
 
 
         [HtmlAttributeName("brn-disable-editor-template")]
@@ -68,7 +70,7 @@ namespace Buran.Core.MvcLibrary.Extenders
         [ViewContext]
         [HtmlAttributeNotBound]
         public ViewContext ViewContext { get; set; }
-        
+
         public ComboBoxTagHelper(IHtmlHelper htmlHelper, IServiceProvider provider)
         {
             LabelColCount = 3;
@@ -212,6 +214,8 @@ namespace Buran.Core.MvcLibrary.Extenders
                 if (!DataUrl.IsEmpty())
                     select.Attributes.Add("data-url", DataUrl);
                 select.AddCssClass("form-control input-sm");
+                if (!CssClass.IsEmpty())
+                    select.AddCssClass(CssClass);
                 select.Attributes.Add("name", htmlName);
                 select.Attributes.Add("id", htmlId);
 

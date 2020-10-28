@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.8.2</Version>
+    <Version>2.8.3</Version>
     <Authors>Osman Buran</Authors>
     <RepositoryUrl>https://github.com/oburan/BuranCore</RepositoryUrl>
   </PropertyGroup>
