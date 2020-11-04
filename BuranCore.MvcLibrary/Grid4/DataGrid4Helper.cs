@@ -112,9 +112,7 @@ namespace Buran.Core.MvcLibrary.Grid4
             #endregion
 
             #region DO PAGING
-            var currentPageSize = option.ItemListCountList.Count > 0
-                    ? option.ItemListCountList.First()
-                    : 20;
+            var currentPageSize = option.DefaultPageSize;
             var currentPageIndexItem = _queryItems.FirstOrDefault(d => d.Key == option.PagerKeyword);
             var pageIndex = 0;
             if (!currentPageIndexItem.Value.IsEmpty())
@@ -592,7 +590,7 @@ data-posturl='{command.Url}' data-confirm='{command.Confirm}'>{command.Title}</a
                      },
                      currentPageSize,
                      pageSizeUrl,
-                     option.ItemListCountList);
+                     option.PageSizeList);
             }
             return string.Empty;
         }

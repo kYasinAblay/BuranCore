@@ -65,7 +65,8 @@ namespace Buran.Core.MvcLibrary.Grid4
             ButtonRefreshEnabled = true;
             ButtonRefreshCss = "btn btn-sm btn-link";
 
-            ItemListCountList = new List<int> { 25, 50, 100 };
+            PageSizeList = new List<int> { 25, 50, 100 };
+            DefaultPageSize = 25;
 
             DefaultSorting = true;
         }
@@ -136,6 +137,7 @@ namespace Buran.Core.MvcLibrary.Grid4
         public string ButtonDeleteShowFunction { get; set; }
         public Type RowFormatClass { get; set; }
 
-        public List<int> ItemListCountList { get; set; }
+        public List<int> PageSizeList { get; set; }
+        public int DefaultPageSize { get; set; }
     }
 }
