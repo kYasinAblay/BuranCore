@@ -7,15 +7,15 @@ namespace Buran.Core.MvcLibrary.Grid
 {
     public class DataGridOptions
     {
-        public enum LayoutTypes
+        public enum PagerLocationTypes
         {
-            Table,
-            TableScroll
+            Top,
+            Bottom,
+            TopAndBottom
         }
 
         public DataGridOptions()
         {
-            LayoutType = LayoutTypes.Table;
             TableId = "";
 
             var popupEditorCss = "fancybox fancybox.iframe";
@@ -72,6 +72,7 @@ namespace Buran.Core.MvcLibrary.Grid
             ButtonRefreshEnabled = true;
             ButtonRefreshCss = "btn btn-xs text-refresh";
 
+            PagerLocation = PagerLocationTypes.Bottom;
             PageSizeList = new List<int> { 25, 50, 100 };
             DefaultPageSize = 25;
 
@@ -79,7 +80,6 @@ namespace Buran.Core.MvcLibrary.Grid
             DefaultSorting = true;
         }
 
-        public LayoutTypes LayoutType { get; set; }
         public string CssTable { get; set; }
         public string TableId { get; set; }
         public bool ShowHeader { get; set; }
@@ -149,5 +149,6 @@ namespace Buran.Core.MvcLibrary.Grid
 
         public List<int> PageSizeList { get; set; }
         public int DefaultPageSize { get; set; }
+        public PagerLocationTypes PagerLocation { get; set; }
     }
 }

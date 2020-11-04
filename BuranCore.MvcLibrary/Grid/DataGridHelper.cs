@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using static Buran.Core.MvcLibrary.Grid.DataGridOptions;
 
 namespace Buran.Core.MvcLibrary.Grid
 {
@@ -137,54 +138,9 @@ namespace Buran.Core.MvcLibrary.Grid
                 firstItemType = firstItem.GetType();
 
             var writer = new HtmlContentBuilder();
-            var tableScrollFirst = option.LayoutType == DataGridOptions.LayoutTypes.TableScroll && pageIndex == 0;
-            var tableScroll = option.LayoutType == DataGridOptions.LayoutTypes.TableScroll && pageIndex > 0;
             RefreshUrl(helper, option);
 
-            if (option.LayoutType == DataGridOptions.LayoutTypes.Table || tableScrollFirst)
-            {
-                var scrollCss = option.Scrollable ? "class='table-scrollable'" : string.Empty;
-                writer.AppendHtmlLine($"<div id='dataGrid-{option.GridDiv}' data-refreshurl='{_refreshUrl}' {scrollCss}> ");
-                var cssTable = string.Empty;
-                if (!option.CssTable.IsEmpty())
-                    cssTable = $" class=\"{option.CssTable}\"";
-                var idTable = string.Empty;
-                if (!option.TableId.IsEmpty())
-                    idTable = $" id=\"{option.TableId}\"";
-
-                writer.AppendHtmlLine(RenderHeaderBar2(option));
-
-                writer.AppendHtmlLine($"<table{idTable}{cssTable}>");
-            }
-            if (option.LayoutType == DataGridOptions.LayoutTypes.Table || tableScrollFirst)
-            {
-                if (option.ShowHeader)
-                {
-                    writer.AppendHtmlLine($"<thead>");
-                    _colCount = columns.Count(d => d.Visible);
-                    if (option.ButtonDeleteEnabled || option.ButtonEditEnabled || option.ButtonRefreshEnabled /*|| option.ButtonExportExcelEnabled*/)
-                        _colCount++;
-                    //writer.AppendHtmlLine(RenderHeaderBar(option));
-                    if (option.FilteringEnabled)
-                        writer.AppendHtmlLine(RenderFilterRow(helper, columns, firstItemType));
-                    writer.AppendHtmlLine(RenderHeader<T>(helper, columns, option, firstItemType));
-                    writer.AppendHtmlLine($"</thead>");
-                }
-            }
-            writer.AppendHtmlLine($"<tbody>");
-            foreach (var item in items)
-                writer.AppendHtmlLine(RenderRow(helper, columns, item, option));
-            if (tableScrollFirst || tableScroll)
-                writer.AppendHtmlLine(RenderNextScrollLink(helper, option, pageIndex));
-            if (option.LayoutType == DataGridOptions.LayoutTypes.Table || tableScrollFirst)
-            {
-                writer.AppendHtmlLine($"</tbody>");
-                writer.AppendHtmlLine("</table>");
-                writer.AppendHtmlLine("</div>");
-            }
-            if (option.FilteringEnabled && columns.Count(d => !d.FilterValue.IsEmpty()) > 0)
-                writer.AppendHtmlLine(RenderFilterRowFooter(columns, option));
-            if (option.PagerEnabled && option.LayoutType != DataGridOptions.LayoutTypes.TableScroll)
+            if (option.PagerEnabled && (option.PagerLocation == PagerLocationTypes.Top || option.PagerLocation == PagerLocationTypes.TopAndBottom))
             {
                 if (data is PagedList<T> || data is StaticPagedList<T>)
                 {
@@ -197,6 +153,51 @@ namespace Buran.Core.MvcLibrary.Grid
                     writer.AppendHtmlLine(pager);
                 }
             }
+
+            writer.AppendHtmlLine($"<div id='dataGrid-{option.GridDiv}' data-refreshurl='{_refreshUrl}'> ");
+            var cssTable = string.Empty;
+            if (!option.CssTable.IsEmpty())
+                cssTable = $" class=\"{option.CssTable}\"";
+            var idTable = string.Empty;
+            if (!option.TableId.IsEmpty())
+                idTable = $" id=\"{option.TableId}\"";
+            writer.AppendHtmlLine(RenderHeaderBar2(option));
+            writer.AppendHtmlLine($"<table{idTable}{cssTable}>");
+            if (option.ShowHeader)
+            {
+                writer.AppendHtmlLine($"<thead>");
+                _colCount = columns.Count(d => d.Visible);
+                if (option.ButtonDeleteEnabled || option.ButtonEditEnabled || option.ButtonRefreshEnabled)
+                    _colCount++;
+                if (option.FilteringEnabled)
+                    writer.AppendHtmlLine(RenderFilterRow(helper, columns, firstItemType));
+                writer.AppendHtmlLine(RenderHeader<T>(helper, columns, option, firstItemType));
+                writer.AppendHtmlLine($"</thead>");
+            }
+            writer.AppendHtmlLine($"<tbody>");
+            foreach (var item in items)
+                writer.AppendHtmlLine(RenderRow(helper, columns, item, option));
+            writer.AppendHtmlLine($"</tbody>");
+            writer.AppendHtmlLine("</table>");
+            writer.AppendHtmlLine("</div>");
+
+            if (option.FilteringEnabled && columns.Count(d => !d.FilterValue.IsEmpty()) > 0)
+                writer.AppendHtmlLine(RenderFilterRowFooter(columns, option));
+
+            if (option.PagerEnabled && (option.PagerLocation == PagerLocationTypes.Bottom ||  option.PagerLocation == PagerLocationTypes.TopAndBottom))
+            {
+                if (data is PagedList<T> || data is StaticPagedList<T>)
+                {
+                    var pager = RenderPager(helper, data, option, currentPageSize);
+                    writer.AppendHtmlLine(pager);
+                }
+                else
+                {
+                    var pager = RenderPager(helper, items, option, currentPageSize);
+                    writer.AppendHtmlLine(pager);
+                }
+            }
+
             return new HtmlString(writer.GetString());
         }
 
@@ -585,9 +586,7 @@ data-posturl='{command.Url}' data-confirm='{command.Confirm}'>{command.Title}</a
                 return HtmlHelper2.PagedListPager2(
                      helper,
                      pagedList,
-                     page => string.Format("javascript:{0}('{1}','{2}');",
-                     option.PagerJsFunction,
-                     string.Format(pageUrl, page), option.GridDiv),
+                     page => $"javascript:{option.PagerJsFunction}('{string.Format(pageUrl, page)}','{option.GridDiv}');",
                      new PagedListRenderOptions
                      {
                          DisplayItemSliceAndTotal = true
@@ -602,21 +601,6 @@ data-posturl='{command.Url}' data-confirm='{command.Confirm}'>{command.Title}</a
         private static string RenderFilterRowFooter(IEnumerable<DataColumn> columns, DataGridOptions option)
         {
             return _filter.ActiveFilter(_colCount, columns.ToList());
-        }
-
-        private static string RenderNextScrollLink(IHtmlHelper helper, DataGridOptions option, int pageIndex)
-        {
-            var builder = new HtmlContentBuilder();
-
-            var linkTag = @"<tr class='kScrollNav hide'>
-        <td><a href='{0}'>NEXT</a></td>
-    </tr>";
-            var nextUrl = string.Empty;
-            if (pageIndex + 1 <= TotalPageCount)
-            {
-            }
-            builder.AppendHtml(string.Format(linkTag, nextUrl));
-            return builder.GetString();
         }
     }
 }

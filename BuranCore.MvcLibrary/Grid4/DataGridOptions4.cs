@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using static Buran.Core.MvcLibrary.Grid.DataGridOptions;
 
 namespace Buran.Core.MvcLibrary.Grid4
 {
@@ -67,6 +68,7 @@ namespace Buran.Core.MvcLibrary.Grid4
 
             PageSizeList = new List<int> { 25, 50, 100 };
             DefaultPageSize = 25;
+            PagerLocation = PagerLocationTypes.Bottom;
 
             DefaultSorting = true;
         }
@@ -139,5 +141,6 @@ namespace Buran.Core.MvcLibrary.Grid4
 
         public List<int> PageSizeList { get; set; }
         public int DefaultPageSize { get; set; }
+        public PagerLocationTypes PagerLocation { get; set; }
     }
 }
