@@ -5,15 +5,16 @@ using System.Drawing;
 
 namespace Buran.Core.MvcLibrary.Grid
 {
+    public enum PagerLocationTypes
+    {
+        Top,
+        Bottom,
+        TopAndBottom
+    }
+
+
     public class DataGridOptions
     {
-        public enum PagerLocationTypes
-        {
-            Top,
-            Bottom,
-            TopAndBottom
-        }
-
         public DataGridOptions()
         {
             TableId = "";

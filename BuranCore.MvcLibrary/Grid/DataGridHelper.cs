@@ -10,55 +10,31 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using static Buran.Core.MvcLibrary.Grid.DataGridOptions;
 
 namespace Buran.Core.MvcLibrary.Grid
 {
     public static class DataGridHelper
     {
-        public static int TotalRowCount { get; private set; }
-        public static int TotalPageCount { get; private set; }
-
-        private static int _colCount;
-        private static QueryString _query;
-        private static Dictionary<string, StringValues> _queryDictionary;
-        private static List<KeyValuePair<string, string>> _queryItems;
-        private static string _queryParams = "";
-
-        private static Sorter _sorter;
-        private static Filter _filter;
-        private static string _refreshUrl = string.Empty;
-
-        private static void RefreshUrl(IHtmlHelper helper, DataGridOptions option)
-        {
-            var baseUrl = LibGeneral.GetContentUrl(helper.ViewContext.RouteData);
-            var fs = $@"/{baseUrl}/{option.PagerAndShortAction}{_queryParams}";
-            _refreshUrl = $"{option.PagerJsFunction}(\"{fs}\",\"{option.GridDiv}\");";
-        }
-
         public static HtmlString DataGrid<T>(this IHtmlHelper helper, IEnumerable<T> data, DataColumn[] columns, DataGridOptions option)
             where T : class
         {
-            _query = helper.ViewContext.HttpContext.Request.QueryString;
-            _queryDictionary = QueryHelpers.ParseQuery(_query.ToString());
-            _queryItems = _queryDictionary.SelectMany(x => x.Value, (col, value) => new KeyValuePair<string, string>(col.Key, value)).ToList();
-            _queryParams = _query.ToUriComponent();
+            var _query = helper.ViewContext.HttpContext.Request.QueryString;
+            var _queryDictionary = QueryHelpers.ParseQuery(_query.ToString());
+            var _queryItems = _queryDictionary.SelectMany(x => x.Value, (col, value) => new KeyValuePair<string, string>(col.Key, value)).ToList();
+            var _queryParams = _query.ToUriComponent();
 
             if (!option.PagerAndShortAction.IsEmpty())
             {
                 var psss = option.PagerAndShortAction.Split('?');
                 if (psss.Length > 1)
-                {
                     _queryParams = _queryParams.Replace("?" + psss[1], "");
-                }
             }
 
-            _colCount = 0;
+            var _colCount = 0;
             var items = data;
             if (items == null)
             {
@@ -66,10 +42,10 @@ namespace Buran.Core.MvcLibrary.Grid
                 return new HtmlString(content.GetString());
             }
 
-            _sorter = new Sorter(_queryItems, option.SortKeyword, option.PagerAndShortAction, helper);
-            _filter = new Filter(_queryDictionary, _queryItems, option.PagerKeyword,
-                helper.ViewContext.RouteData, option.PagerAndShortAction,
-                helper, option.PagerJsFunction, option.GridDiv);
+            var _sorter = new Sorter(_queryItems, option.SortKeyword, option.PagerAndShortAction, helper);
+            var _filter = new Filter(_queryDictionary, _queryItems, option.PagerKeyword,
+                   helper.ViewContext.RouteData, option.PagerAndShortAction,
+                   helper, option.PagerJsFunction, option.GridDiv);
 
             if (option.FilteringEnabled && !(data is PagedList<T>) && !(data is StaticPagedList<T>))
             {
@@ -121,12 +97,8 @@ namespace Buran.Core.MvcLibrary.Grid
             {
                 var currentPageSizeStr = _queryItems.FirstOrDefault(d => d.Key == option.PageSizeKeyword);
                 if (!currentPageSizeStr.Value.IsEmpty())
-                {
                     int.TryParse(currentPageSizeStr.Value, out currentPageSize);
-                }
                 items = new PagedList<T>(items, pageIndex, currentPageSize);
-                TotalRowCount = (items as PagedList<T>).TotalItemCount;
-                TotalPageCount = (items as PagedList<T>).PageCount;
             }
             #endregion
 
@@ -138,18 +110,20 @@ namespace Buran.Core.MvcLibrary.Grid
                 firstItemType = firstItem.GetType();
 
             var writer = new HtmlContentBuilder();
-            RefreshUrl(helper, option);
+            var baseUrl = LibGeneral.GetContentUrl(helper.ViewContext.RouteData);
+            var fs = $@"/{baseUrl}/{option.PagerAndShortAction}{_queryParams}";
+            var _refreshUrl = $"{option.PagerJsFunction}(\"{fs}\",\"{option.GridDiv}\");";
 
             if (option.PagerEnabled && (option.PagerLocation == PagerLocationTypes.Top || option.PagerLocation == PagerLocationTypes.TopAndBottom))
             {
                 if (data is PagedList<T> || data is StaticPagedList<T>)
                 {
-                    var pager = RenderPager(helper, data, option, currentPageSize);
+                    var pager = RenderPager(helper, data, option, currentPageSize, _queryItems);
                     writer.AppendHtmlLine(pager);
                 }
                 else
                 {
-                    var pager = RenderPager(helper, items, option, currentPageSize);
+                    var pager = RenderPager(helper, items, option, currentPageSize, _queryItems);
                     writer.AppendHtmlLine(pager);
                 }
             }
@@ -170,8 +144,8 @@ namespace Buran.Core.MvcLibrary.Grid
                 if (option.ButtonDeleteEnabled || option.ButtonEditEnabled || option.ButtonRefreshEnabled)
                     _colCount++;
                 if (option.FilteringEnabled)
-                    writer.AppendHtmlLine(RenderFilterRow(helper, columns, firstItemType));
-                writer.AppendHtmlLine(RenderHeader<T>(helper, columns, option, firstItemType));
+                    writer.AppendHtmlLine(RenderFilterRow(helper, columns, firstItemType, _filter));
+                writer.AppendHtmlLine(RenderHeader<T>(helper, columns, option, firstItemType, _refreshUrl, _sorter, _filter));
                 writer.AppendHtmlLine($"</thead>");
             }
             writer.AppendHtmlLine($"<tbody>");
@@ -180,24 +154,21 @@ namespace Buran.Core.MvcLibrary.Grid
             writer.AppendHtmlLine($"</tbody>");
             writer.AppendHtmlLine("</table>");
             writer.AppendHtmlLine("</div>");
-
             if (option.FilteringEnabled && columns.Count(d => !d.FilterValue.IsEmpty()) > 0)
-                writer.AppendHtmlLine(RenderFilterRowFooter(columns, option));
-
-            if (option.PagerEnabled && (option.PagerLocation == PagerLocationTypes.Bottom ||  option.PagerLocation == PagerLocationTypes.TopAndBottom))
+                writer.AppendHtmlLine(RenderFilterRowFooter(columns, _filter, _colCount));
+            if (option.PagerEnabled && (option.PagerLocation == PagerLocationTypes.Bottom || option.PagerLocation == PagerLocationTypes.TopAndBottom))
             {
                 if (data is PagedList<T> || data is StaticPagedList<T>)
                 {
-                    var pager = RenderPager(helper, data, option, currentPageSize);
+                    var pager = RenderPager(helper, data, option, currentPageSize, _queryItems);
                     writer.AppendHtmlLine(pager);
                 }
                 else
                 {
-                    var pager = RenderPager(helper, items, option, currentPageSize);
+                    var pager = RenderPager(helper, items, option, currentPageSize, _queryItems);
                     writer.AppendHtmlLine(pager);
                 }
             }
-
             return new HtmlString(writer.GetString());
         }
 
@@ -206,10 +177,7 @@ namespace Buran.Core.MvcLibrary.Grid
             var builder = new HtmlContentBuilder();
             var printHeader = option.HeaderButtons.Count > 0;
             if (!printHeader)
-            {
                 return string.Empty;
-            }
-
             builder.AppendHtml($@"<div class='btnHeaderList'>
 <div class='btn-group'>
     <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
@@ -219,15 +187,14 @@ namespace Buran.Core.MvcLibrary.Grid
             if (option.HeaderButtons.Count > 0)
             {
                 foreach (var button in option.HeaderButtons)
-                {
                     builder.AppendHtml($"<li>{button.Value}</li>");
-                }
             }
             builder.AppendHtml("</ul></div></div>");
             return builder.GetString();
         }
 
-        private static string RenderHeader<T>(IHtmlHelper helper, IEnumerable<DataColumn> columns, DataGridOptions option, Type firstItemType)
+        private static string RenderHeader<T>(IHtmlHelper helper, IEnumerable<DataColumn> columns, DataGridOptions option,
+            Type firstItemType, string refreshUrl, Sorter sorter, Filter filter)
         {
             var builder = new HtmlContentBuilder();
             builder.AppendHtml("<tr>");
@@ -254,13 +221,10 @@ namespace Buran.Core.MvcLibrary.Grid
                     var pop = option.InsertPopup ? option.Popup : "";
                     builder.AppendHtml(string.Format("<a href='{0}/{1}' class='{2}' {4}>{3}</a>",
                         $"/{LibGeneral.GetContentUrl(helper.ViewContext.RouteData)}",
-                        action,
-                        buttonClass,
-                        "<span class=\"fa fa-plus\"></span>",
-                        pop));
+                        action, buttonClass, "<span class=\"fa fa-plus\"></span>", pop));
                 }
                 if (option.ButtonRefreshEnabled)
-                    builder.AppendHtml($"<a onClick='{_refreshUrl}' id='btnGridRefresh-{option.GridDiv}' class='{option.ButtonRefreshCss}'><span class=\"fa fa-refresh\"></span></a>");
+                    builder.AppendHtml($"<a onClick='{refreshUrl}' id='btnGridRefresh-{option.GridDiv}' class='{option.ButtonRefreshCss}'><span class=\"fa fa-refresh\"></span></a>");
                 builder.AppendHtml("</div>");
                 builder.AppendHtml("</th>");
             }
@@ -299,10 +263,10 @@ namespace Buran.Core.MvcLibrary.Grid
                     if (option.Sortable && field.Sortable)
                     {
                         var sortFieldName = field.SortField.IsEmpty() ? field.FieldName : field.SortField;
-                        var sortImg = _sorter.GetSortImg(sortFieldName);
-                        var sortParam = _sorter.GetSortParam(sortFieldName);
+                        var sortImg = sorter.GetSortImg(sortFieldName);
+                        var sortParam = sorter.GetSortParam(sortFieldName);
 
-                        var url = $@"/{LibGeneral.GetContentUrl(helper.ViewContext.RouteData)}/{option.PagerAndShortAction}{urlOperator}{option.SortKeyword}={sortParam}&{_sorter.CleanQueryString}";
+                        var url = $@"/{LibGeneral.GetContentUrl(helper.ViewContext.RouteData)}/{option.PagerAndShortAction}{urlOperator}{option.SortKeyword}={sortParam}&{sorter.CleanQueryString}";
 
                         builder.AppendHtml($"<a class='textHeader' href=\"javascript:{option.PagerJsFunction}('{url}', '{option.GridDiv}');\">{field.Caption}</a>");
                         builder.AppendHtml(sortImg);
@@ -315,7 +279,7 @@ namespace Buran.Core.MvcLibrary.Grid
                         var fieldType = field.FilterField.IsEmpty()
                                        ? Digger.GetType(firstItemType, field.FieldName)
                                        : Digger.GetType(firstItemType, field.FilterField);
-                        if (_filter.CanFilterable(fieldType))
+                        if (filter.CanFilterable(fieldType))
                         {
                             var fReplace = field.FilterField.IsEmpty()
                                                ? field.FieldName.Replace(".", "__")
@@ -337,13 +301,13 @@ namespace Buran.Core.MvcLibrary.Grid
             return builder.GetString();
         }
 
-        private static string RenderFilterRow(IHtmlHelper helper, IEnumerable<DataColumn> columns, Type firstItemType)
+        private static string RenderFilterRow(IHtmlHelper helper, IEnumerable<DataColumn> columns, Type firstItemType, Filter filter)
         {
             var builder = new HtmlContentBuilder();
             foreach (var field in columns.Where(d => d.Visible))
             {
                 if (!string.IsNullOrWhiteSpace(field.FieldName) || !string.IsNullOrWhiteSpace(field.FilterField))
-                    builder.AppendHtml(_filter.GetFilterDiv(field, firstItemType));
+                    builder.AppendHtml(filter.GetFilterDiv(field, firstItemType));
             }
             return builder.GetString();
         }
@@ -360,10 +324,7 @@ namespace Buran.Core.MvcLibrary.Grid
             var keyText = ValueConverter.GetFieldValue(item, option.TextField);
             foreach (var button in option.Buttons)
             {
-                builder.AppendHtml(button.GetString()
-                                    .Replace("KEYFIELD", keyFieldValue)
-                                    .Replace("KEYTEXT", keyText)
-                                    .Replace("btn-mini", "btn-xs"));
+                builder.AppendHtml(button.GetString().Replace("KEYFIELD", keyFieldValue).Replace("KEYTEXT", keyText).Replace("btn-mini", "btn-xs"));
             }
             if (option.RowOtherButtons.Count > 0)
             {
@@ -384,7 +345,6 @@ namespace Buran.Core.MvcLibrary.Grid
                     url += $"&{option.KeyField}={keyFieldValue}";
                 else
                     url += $"/{keyFieldValue}";
-
                 var action = url;
                 if (option.GridDiv != "divList")
                 {
@@ -398,7 +358,7 @@ namespace Buran.Core.MvcLibrary.Grid
             }
             if (option.ButtonEditEnabled)
             {
-                var drawEditButton = false;
+                bool drawEditButton;
                 if (option.RowFormatClass != null && !option.ButtonEditShowFunction.IsEmpty())
                 {
                     var obj = Activator.CreateInstance(option.RowFormatClass);
@@ -416,7 +376,6 @@ namespace Buran.Core.MvcLibrary.Grid
                         url += $"&{option.KeyField}={keyFieldValue}";
                     else
                         url += $"/{keyFieldValue}";
-
                     var action = url;
                     if (option.GridDiv != "divList")
                     {
@@ -431,7 +390,7 @@ namespace Buran.Core.MvcLibrary.Grid
             }
             if (option.ButtonDeleteEnabled)
             {
-                var drawDeleteButton = false;
+                bool drawDeleteButton;
                 if (option.RowFormatClass != null && !option.ButtonDeleteShowFunction.IsEmpty())
                 {
                     var obj = Activator.CreateInstance(option.RowFormatClass);
@@ -449,7 +408,6 @@ namespace Buran.Core.MvcLibrary.Grid
                         url += $"&{option.KeyField}={keyFieldValue}";
                     else
                         url += $"/{keyFieldValue}";
-
                     var action = url;
                     if (action.Contains("?"))
                         action += "&";
@@ -459,9 +417,7 @@ namespace Buran.Core.MvcLibrary.Grid
                     var text = string.Format(Text.AskDelete, keyText).Replace("'", "\"");
                     builder.AppendHtml(string.Format(
                         "<a href='javascript:;' data-posturl='{0}' class='btnGridDelete {1}' data-confirm='{2}'><span class='fa fa-trash-o'></span></a>",
-                        action,
-                        option.ButtonDeleteCss,
-                        text));
+                        action, option.ButtonDeleteCss, text));
                 }
             }
             builder.AppendHtml("</div>");
@@ -521,7 +477,6 @@ data-posturl='{command.Url}' data-confirm='{command.Confirm}'>{command.Title}</a
                 if (!field.CellCssClass.IsEmpty())
                     attr += $" class='{field.CellCssClass}'";
                 builder.AppendHtml($"<td{attr}>");
-
                 if (field.ObjectValueFunction.IsEmpty() || field.ObjectValueConverter == null)
                     builder.AppendHtml(ValueConverter.GetValue(helper, item, field));
                 else
@@ -529,8 +484,11 @@ data-posturl='{command.Url}' data-confirm='{command.Confirm}'>{command.Title}</a
                     var type = field.ObjectValueConverter;
                     var obj = Activator.CreateInstance(type);
                     var a = type.GetMethod(field.ObjectValueFunction);
-                    var sonuc = (string)a.Invoke(obj, new object[2] { helper, item });
-                    builder.AppendHtml(sonuc);
+                    if (a != null)
+                    {
+                        var sonuc = (string)a.Invoke(obj, new object[2] { helper, item });
+                        builder.AppendHtml(sonuc);
+                    }
                 }
                 builder.AppendHtml("</td>");
             }
@@ -538,14 +496,15 @@ data-posturl='{command.Url}' data-confirm='{command.Confirm}'>{command.Title}</a
             return builder.GetString();
         }
 
-        private static string RenderPager<T>(IHtmlHelper helper, IEnumerable<T> items, DataGridOptions option, int currentPageSize)
+        private static string RenderPager<T>(IHtmlHelper helper, IEnumerable<T> items, DataGridOptions option, int currentPageSize,
+            List<KeyValuePair<string, string>> queryItems)
             where T : class
         {
             var pagedList = (IPagedList<T>)items;
             if (pagedList != null)
             {
                 var urlOperator = option.PagerAndShortAction.IndexOf("?") > -1 ? "&" : "?";
-                var qc = new List<KeyValuePair<string, string>>(_queryItems);
+                var qc = new List<KeyValuePair<string, string>>(queryItems);
                 qc.RemoveAll(d => d.Key == option.PagerKeyword);
                 qc.RemoveAll(d => d.Key == option.PageSizeKeyword);
 
@@ -582,7 +541,6 @@ data-posturl='{command.Url}' data-confirm='{command.Confirm}'>{command.Title}</a
                 fs = fs.Replace("??", "?");
                 var pageSizeUrl = $"{option.PagerJsFunction}('{fs}', '{option.GridDiv}');";
 
-
                 return HtmlHelper2.PagedListPager2(
                      helper,
                      pagedList,
@@ -598,9 +556,9 @@ data-posturl='{command.Url}' data-confirm='{command.Confirm}'>{command.Title}</a
             return string.Empty;
         }
 
-        private static string RenderFilterRowFooter(IEnumerable<DataColumn> columns, DataGridOptions option)
+        private static string RenderFilterRowFooter(IEnumerable<DataColumn> columns, Filter filter, int colCount)
         {
-            return _filter.ActiveFilter(_colCount, columns.ToList());
+            return filter.ActiveFilter(colCount, columns.ToList());
         }
     }
 }
