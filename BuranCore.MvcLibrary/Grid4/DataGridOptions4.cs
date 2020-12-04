@@ -49,7 +49,7 @@ namespace Buran.Core.MvcLibrary.Grid4
             ButtonInsertPopupCss = ButtonInsertCss + " " + popupEditorCss;
 
             ButtonShowEnabled = false;
-            ButtonShowAction = "";
+            ButtonShowAction = "show";
             ButtonShowCss = "btn btn-sm btn-label-default";
 
             ButtonColumnWidth = 75;

@@ -55,7 +55,7 @@ namespace Buran.Core.MvcLibrary.Grid
             ButtonInsertPopupCss = ButtonInsertCss + " " + popupEditorCss;
 
             ButtonShowEnabled = false;
-            ButtonShowAction = "";
+            ButtonShowAction = "show";
             ButtonShowCss = "btn btn-xs blue-steel";
 
             ButtonColumnWidth = 75;

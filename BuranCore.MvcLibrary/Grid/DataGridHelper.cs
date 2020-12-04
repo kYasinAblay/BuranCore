@@ -341,7 +341,7 @@ namespace Buran.Core.MvcLibrary.Grid
                 var url = option.ButtonShowAction.IsEmpty()
                         ? $@"/{LibGeneral.GetContentUrl(helper.ViewContext.RouteData)}"
                         : $@"/{LibGeneral.GetContentUrl(helper.ViewContext.RouteData)}/{option.ButtonShowAction}";
-                if (option.ButtonEditAction.Contains("?"))
+                if (option.ButtonShowAction.Contains("?"))
                     url += $"&{option.KeyField}={keyFieldValue}";
                 else
                     url += $"/{keyFieldValue}";
