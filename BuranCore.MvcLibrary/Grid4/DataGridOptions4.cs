@@ -34,12 +34,12 @@ namespace Buran.Core.MvcLibrary.Grid4
 
             ButtonDeleteEnabled = false;
             ButtonDeleteAction = "delete";
-            ButtonDeleteCss = "btn btn-sm btn-label-danger";
+            ButtonDeleteCss = "btn btn-sm btn-danger";
 
             ButtonEditEnabled = true;
             ButtonEditAction = "edit";
             EditPopup = false;
-            ButtonEditCss = "btn btn-sm btn-label-default";
+            ButtonEditCss = "btn btn-sm btn-default";
             ButtonEditPopupCss = ButtonEditCss + " " + popupEditorCss;
 
             ButtonInsertAction = "create";
@@ -50,7 +50,7 @@ namespace Buran.Core.MvcLibrary.Grid4
 
             ButtonShowEnabled = false;
             ButtonShowAction = "show";
-            ButtonShowCss = "btn btn-sm btn-label-default";
+            ButtonShowCss = "btn btn-sm btn-default";
 
             ButtonColumnWidth = 75;
 

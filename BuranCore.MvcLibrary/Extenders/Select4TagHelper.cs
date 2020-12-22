@@ -245,7 +245,7 @@ $(function () {{
     <select id='{htmlId}' name='{htmlName}' class='form-control form-control-sm {CssClass}' {valHtml}>
     </select>
     <div class=""input-group-append"">
-        <a href='{AddNewUrl}' class='btn btn-sm btn-label-primary btnAddPopup fancyboxAdd fancybox.iframe'><i class='fas fa-plus'></i></a>
+        <a href='{AddNewUrl}' class='btn btn-sm btn-default btnAddPopup fancyboxAdd fancybox.iframe'><i class='fas fa-plus'></i></a>
     </div>
     {js}
 </div>");
@@ -282,7 +282,7 @@ $(function () {{
         <select id='{htmlId}' name='{htmlName}' class='form-control form-control-sm {CssClass}' {valHtml}>
         </select>
         <div class=""input-group-append"">
-            <a href='{AddNewUrl}' class='btn btn-sm btn-label-primary btnAddPopup fancyboxAdd fancybox.iframe'><i class='fas fa-plus'></i></a>
+            <a href='{AddNewUrl}' class='btn btn-sm btn-default btnAddPopup fancyboxAdd fancybox.iframe'><i class='fas fa-plus'></i></a>
         </div>
     </div>
     {metaHtml}

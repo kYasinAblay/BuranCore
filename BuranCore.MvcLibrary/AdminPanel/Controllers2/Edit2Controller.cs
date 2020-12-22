@@ -51,7 +51,7 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
                     ItemType = EditPageMenuItemType.Insert,
                     Title = UI.New,
                     IconClass = "fas fa-plus",
-                    ButtonClass = "btn btn-label-primary btn-sm",
+                    ButtonClass = "btn btn-primary btn-sm",
                     Url = Url.Action("Create")
                 });
             }

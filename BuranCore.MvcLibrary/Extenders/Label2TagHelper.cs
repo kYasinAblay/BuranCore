@@ -36,14 +36,6 @@ namespace Buran.Core.MvcLibrary.Extenders
             _htmlHelper = htmlHelper;
         }
 
-        //public override void Process(TagHelperContext context, TagHelperOutput output)
-        //{
-        //    output.TagName = "label";
-        //    output.TagMode = TagMode.StartTagAndEndTag;
-        //    output.Attributes.Add("for", Name);
-        //    output.Content.SetHtmlContent(Text);
-        //}
-
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             (_htmlHelper as IViewContextAware).Contextualize(ViewContext);

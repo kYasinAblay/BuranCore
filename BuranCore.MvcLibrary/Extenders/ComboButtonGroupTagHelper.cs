@@ -129,7 +129,7 @@ namespace Buran.Core.MvcLibrary.Extenders
 
             var sbOptions = new StringBuilder();
             sbOptions.AppendLine($@"
-<button type=""button"" class=""btn btn-label-primary btn-sm dropdown-toggle"" data-toggle=""dropdown"">
+<button type=""button"" class=""btn btn-outline-secondary btn-sm dropdown-toggle"" data-toggle=""dropdown"">
     <span id=""lbl{htmlId}"">{selectedText}</span> <span class=""caret""></span>
 </button>
 <div class=""dropdown-menu"">

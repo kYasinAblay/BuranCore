@@ -37,7 +37,7 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
                 Title = UI.Back,
                 IconClass = "fas fa-angle-left",
                 Url = Url.Action("Index"),
-                ButtonClass = "btn btn-label-default btn-sm"
+                ButtonClass = "btn btn-default btn-sm"
             });
             var saveButton = new EditorPageMenuItem
             {
@@ -45,7 +45,7 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
                 Title = UI.Save,
                 IconClass = "fas fa-check",
                 Id = "btnFormSubmit",
-                ButtonClass = "btn btn-label-primary btn-sm",
+                ButtonClass = "btn btn-primary btn-sm",
                 ButtonIdClass = "btnFormSubmit"
             };
             saveButton.SplitItems.Add(new EditorPageMenuSplitItem
@@ -71,7 +71,7 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
                 Title = UI.Back,
                 IconClass = "fas fa-angle-left",
                 Url = Url.Action("Index"),
-                ButtonClass = "btn btn-label-default btn-sm"
+                ButtonClass = "btn btn-default btn-sm"
             });
             var saveButton = new EditorPageMenuItem
             {
@@ -79,7 +79,7 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
                 Title = UI.Save,
                 IconClass = "fas fa-check",
                 Id = "btnFormSubmit",
-                ButtonClass = "btn btn-label-primary btn-sm",
+                ButtonClass = "btn btn-primary btn-sm",
                 ButtonIdClass = "btnFormSubmit"
             };
             saveButton.SplitItems.Add(new EditorPageMenuSplitItem
@@ -98,7 +98,7 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
                 Title = UI.Back,
                 IconClass = "fas fa-angle-left",
                 Url = Url.Action("Index"),
-                ButtonClass = "btn btn-label-default btn-sm"
+                ButtonClass = "btn btn-default btn-sm"
             });
             if (OnEditAuthCheck())
             {
@@ -108,7 +108,7 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
                     Title = UI.Edit,
                     IconClass = "fas fa-edit",
                     Url = Url.Action("Edit", new { id }),
-                    ButtonClass = "btn btn-label-primary btn-sm"
+                    ButtonClass = "btn btn-primary btn-sm"
                 });
             }
             if (OnDeleteAuthCheck())
@@ -121,7 +121,7 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
                     Id = "btnFormDelete",
                     PostUrl = Url.Action("Delete", new { id, grid = "goback" }),
                     ConfirmText = UI.ConfirmDelete,
-                    ButtonClass = "btn btn-label-danger btn-sm",
+                    ButtonClass = "btn btn-danger btn-sm",
                     ButtonIdClass = "btnFormDelete"
                 });
             }

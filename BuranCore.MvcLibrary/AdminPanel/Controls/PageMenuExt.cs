@@ -147,7 +147,7 @@ namespace Buran.Core.MvcLibrary.AdminPanel
                 if (item.Items.Count == 0 && item.SplitItems.Count == 0)
                 {
                     if (item.ButtonClass.IsEmpty())
-                        item.ButtonClass = "btn btn-label-primary btn-sm";
+                        item.ButtonClass = "btn btn-primary btn-sm";
 
                     sb.AppendLine("<li class='nav-item'>");
                     if (item.Id.IsEmpty())
@@ -170,7 +170,7 @@ namespace Buran.Core.MvcLibrary.AdminPanel
                 else if (item.Items.Count > 0)
                 {
                     if (item.ButtonClass.IsEmpty())
-                        item.ButtonClass = "btn btn-label-primary btn-sm";
+                        item.ButtonClass = "btn btn-primary btn-sm";
 
                     sb.AppendLine($@"<li class='nav-item dropdown'>
         <a class='dropdown-toggle {item.ButtonClass} {item.ButtonIdClass}' href='#' data-toggle='dropdown'>
@@ -183,7 +183,7 @@ namespace Buran.Core.MvcLibrary.AdminPanel
                 else if (item.SplitItems.Count > 0)
                 {
                     if (item.ButtonClass.IsEmpty())
-                        item.ButtonClass = "btn btn-label-primary btn-sm";
+                        item.ButtonClass = "btn btn-primary btn-sm";
 
                     string btnText;
                     if (item.Id.IsEmpty())
@@ -228,7 +228,7 @@ namespace Buran.Core.MvcLibrary.AdminPanel
                 if (item.Items.Count == 0 && item.SplitItems.Count == 0)
                 {
                     if (item.ButtonClass.IsEmpty())
-                        item.ButtonClass = "btn btn-label-primary btn-sm";
+                        item.ButtonClass = "btn btn-primary btn-sm";
 
                     if (item.Id.IsEmpty())
                     {
@@ -249,7 +249,7 @@ namespace Buran.Core.MvcLibrary.AdminPanel
                 else if (item.Items.Count > 0)
                 {
                     if (item.ButtonClass.IsEmpty())
-                        item.ButtonClass = "btn btn-label-primary btn-sm";
+                        item.ButtonClass = "btn btn-primary btn-sm";
 
                     sb.AppendLine($@"<a class='dropdown-toggle {item.ButtonClass}' href='#' data-toggle='dropdown'>
             <i class='{item.IconClass}'></i>&nbsp;{item.Title}
@@ -261,7 +261,7 @@ namespace Buran.Core.MvcLibrary.AdminPanel
                 else if (item.SplitItems.Count > 0)
                 {
                     if (item.ButtonClass.IsEmpty())
-                        item.ButtonClass = "btn btn-label-primary btn-sm";
+                        item.ButtonClass = "btn btn-primary btn-sm";
 
                     string btnText;
                     if (item.Id.IsEmpty())

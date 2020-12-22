@@ -320,7 +320,7 @@ namespace Buran.Core.MvcLibrary.Extenders
                 if (!AddNewUrl.IsEmpty())
                 {
                     addHtml = $@"<div class='col-sm-1'>
-                <a href='{AddNewUrl}' class='btn btn-sm btn-label-primary fancyboxAdd fancybox.iframe'><i class='fas fa-plus'></i></a>
+                <a href='{AddNewUrl}' class='btn btn-sm btn-primary fancyboxAdd fancybox.iframe'><i class='fas fa-plus'></i></a>
             </div>";
                     EditorColCount--;
                 }

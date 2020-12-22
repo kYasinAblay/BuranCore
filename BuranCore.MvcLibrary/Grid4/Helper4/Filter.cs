@@ -266,8 +266,8 @@ namespace Buran.Core.MvcLibrary.Grid4.Helper4
     </div>
     </div>
       <div class='modal-footer'>
-        <button type='button' class='btn btn-sm btn-label-default' data-dismiss='modal'>{Text.Close}</button>
-        <a id='b_{fReplace}' class='btn btn-sm btn-label-primary btnSearch' 
+        <button type='button' class='btn btn-sm btn-default' data-dismiss='modal'>{Text.Close}</button>
+        <a id='b_{fReplace}' class='btn btn-sm btn-primary btnSearch' 
             data-rel1='{GetWhereUrl(fReplace)}' data-rel2='{_jsFunction}' data-rel3='{_divGrid}'>
             {Text.Search}
         </a>
