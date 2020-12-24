@@ -126,6 +126,9 @@ namespace Buran.Core.MvcLibrary.Extenders
         [HtmlAttributeName("brn-symbol")]
         public string Symbol { get; set; }
 
+        [HtmlAttributeName("brn-readonly")]
+        public bool ReadOnly { get; set; }
+
 
         private IHtmlHelper _htmlHelper;
         private IServiceProvider _serviceProvider;
@@ -182,7 +185,6 @@ namespace Buran.Core.MvcLibrary.Extenders
         {
             (_htmlHelper as IViewContextAware).Contextualize(ViewContext);
             var prefix = ViewContext.ViewData.TemplateInfo.HtmlFieldPrefix;
-
             output.TagName = "div";
             output.TagMode = TagMode.StartTagAndEndTag;
             if (Width > 0)
@@ -190,7 +192,6 @@ namespace Buran.Core.MvcLibrary.Extenders
 
             var htmlId = prefix.IsEmpty() ? ModelItem.Metadata.PropertyName : _htmlHelper.IdForModel() + "_" + ModelItem.Metadata.PropertyName;
             var htmlName = prefix.IsEmpty() ? ModelItem.Metadata.PropertyName : prefix + "." + ModelItem.Metadata.PropertyName;
-
             var labelText = ModelItem.Metadata.DisplayName ?? ModelItem.Metadata.PropertyName ?? htmlId.Split('.').Last();
 
             if (ItemList == null)
@@ -201,8 +202,6 @@ namespace Buran.Core.MvcLibrary.Extenders
             var sbOptions = new StringBuilder();
             if (CanClearSelect)
                 sbOptions.AppendLine(string.Concat("<option value=\"\"></option>"));
-
-            //var selectedItemText = "";
             if (ItemList != null)
             {
                 foreach (var item in ItemList)
@@ -210,10 +209,7 @@ namespace Buran.Core.MvcLibrary.Extenders
                     var option = new TagBuilder("option");
                     option.Attributes.Add("value", item.Value);
                     if (item.Selected)
-                    {
                         option.Attributes.Add("selected", "selected");
-                        //selectedItemText = item.Value;
-                    }
                     option.InnerHtml.AppendHtml(item.Text);
                     sbOptions.AppendLine(option.GetString());
                 }
@@ -225,15 +221,11 @@ namespace Buran.Core.MvcLibrary.Extenders
                     var option = new TagBuilder("option");
                     option.Attributes.Add("value", item.Value);
                     if (item.Selected)
-                    {
                         option.Attributes.Add("selected", "selected");
-                        //selectedItemText = item.Value;
-                    }
                     option.InnerHtml.AppendHtml(item.Text);
                     sbOptions.AppendLine(option.GetString());
                 }
             }
-
             var select = new TagBuilder("select");
             select.AddCssClass("form-control form-control-sm");
             if (!CssClass.IsEmpty())
@@ -277,6 +269,7 @@ $(function () {{
         placeholder: ""{(PlaceHolderText.IsEmpty() ? "" : PlaceHolderText)}"",
         {(MultiSelect ? "multiple:true," : "")}
         {(Tag ? "tags:true," : "")}
+        {(ReadOnly ? "disabled:true," : "")}
         {(CanClearSelect ? "allowClear: true" : "")}
     }});
 }});

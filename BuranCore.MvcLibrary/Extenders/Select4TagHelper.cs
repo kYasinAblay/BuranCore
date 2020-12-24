@@ -137,6 +137,8 @@ namespace Buran.Core.MvcLibrary.Extenders
         [HtmlAttributeName("brn-width")]
         public int Width { get; set; }
 
+        [HtmlAttributeName("brn-readonly")]
+        public bool ReadOnly { get; set; }
 
 
         private IHtmlHelper _htmlHelper;
@@ -158,7 +160,6 @@ namespace Buran.Core.MvcLibrary.Extenders
         {
             (_htmlHelper as IViewContextAware).Contextualize(ViewContext);
             var prefix = ViewContext.ViewData.TemplateInfo.HtmlFieldPrefix;
-
             var htmlId = prefix.IsEmpty() ? ModelItem.Metadata.PropertyName : _htmlHelper.IdForModel() + "_" + ModelItem.Metadata.PropertyName;
             var htmlName = prefix.IsEmpty() ? ModelItem.Metadata.PropertyName : prefix + "." + ModelItem.Metadata.PropertyName;
 
@@ -166,16 +167,7 @@ namespace Buran.Core.MvcLibrary.Extenders
             output.TagMode = TagMode.StartTagAndEndTag;
             if (Width > 0)
                 output.Attributes.Add("style", $"width:{Width}px");
-
             var labelText = ModelItem.Metadata.DisplayName ?? ModelItem.Metadata.PropertyName ?? htmlId.Split('.').Last();
-
-            //if (!FieldName.IsEmpty())
-            //{
-            //    htmlId = FieldName;
-            //    htmlName = FieldName;
-            //}
-            //if (!LabelText.IsEmpty())
-            //    labelText = LabelText;
 
             var selectionJs = string.Empty;
             if (SelectedValues != null && SelectedValues.Count > 0)
@@ -210,6 +202,7 @@ $(function () {{
         language: ""tr"",
         {(CanClearSelect ? "allowClear: true, " : "")}
         {(MultiSelect ? "multiple:true," : "")}
+        {(ReadOnly ? "disabled:true," : "")}
         minimumInputLength: 1,
         ajax: {{
             url: '{Url}',
