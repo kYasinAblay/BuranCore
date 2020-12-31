@@ -66,15 +66,15 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
         public virtual void OnShowItem(T item)
         {
         }
-        public virtual T GetShowItem(int id)
+        public virtual async Task<T> GetShowItem(int id)
         {
-            return Repo.GetItem(id);
+            return await Repo.GetItemAsync(id);
         }
-        public virtual IActionResult Show(int id)
+        public virtual async Task<IActionResult> Show(int id)
         {
             if (!OnShowAuthCheck())
                 return new ForbidResult();
-            var item = GetShowItem(id);
+            var item = await GetShowItem(id);
             if (item == null)
                 return NotFound();
             if (!OnShowCheck(item))
@@ -102,7 +102,6 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
         #endregion
 
         #region CREATE
-
         public virtual void AddNewItem(T item)
         {
         }
@@ -278,7 +277,6 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
         {
         }
         private int _editId;
-
 
         [HttpPost]
         public virtual async Task<IActionResult> Edit(int keepEdit, T item)

@@ -6,7 +6,6 @@ using System.Text;
 
 namespace Buran.Core.Library.Export
 {
-
     public static class ExcelExtender
     {
         public static void ToCsvEXport<T>(this IEnumerable<T> list, string fileName)

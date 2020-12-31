@@ -9,7 +9,6 @@ namespace Buran.Core.MvcLibrary.Repository
     {
         IQueryable<T> GetList(Expression<Func<T, bool>> filter = null);
 
-        T GetItem(int id);
         Task<T> GetItemAsync(int id);
 
         bool ValidateItem(T item);

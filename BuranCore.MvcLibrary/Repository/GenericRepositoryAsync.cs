@@ -29,10 +29,6 @@ namespace Buran.Core.MvcLibrary.Repository
                 query = query.Where(filter);
             return query;
         }
-        public virtual T GetItem(int id)
-        {
-            return DbSet.Find(id);
-        }
         public virtual async Task<T> GetItemAsync(int id)
         {
             return await DbSet.FindAsync(id);
