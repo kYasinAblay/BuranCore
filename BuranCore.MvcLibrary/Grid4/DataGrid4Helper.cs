@@ -465,13 +465,16 @@ namespace Buran.Core.MvcLibrary.Grid4
             builder.AppendHtml("<td><div class='btn-group'>");
             foreach (var command in commands)
             {
+                var cssClass = command.Ajax
+                                ? command.Css.IsEmpty() ? "class='btnGridCommand'" : $"class='btnGridCommand {command.Css}'"
+                                : command.Css.IsEmpty() ? "" : $"class='{command.Css}'";
+                var target = command.Target.IsEmpty()
+                                ? ""
+                                : $"target='{command.Target}'";
                 if (command.Ajax)
-                {
-                    builder.AppendHtml($@"<a href='javascript:;' class='btnGridCommand {command.Css}' 
-data-posturl='{command.Url}' data-confirm='{command.Confirm}'>{command.Title}</a>");
-                }
+                    builder.AppendHtml($@"<a href='javascript:;' {cssClass} data-posturl='{command.Url}' data-confirm='{command.Confirm}'>{command.Title}</a>");
                 else
-                    builder.AppendHtml($"<a href='{command.Url}' class='{command.Css}'>{command.Title}</a>");
+                    builder.AppendHtml($"<a href='{command.Url}' {cssClass} {target}>{command.Title}</a>");
             }
             builder.AppendHtml("</div></td>");
             return builder.GetString();
