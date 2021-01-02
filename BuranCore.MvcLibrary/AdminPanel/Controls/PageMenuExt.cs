@@ -17,7 +17,6 @@ namespace Buran.Core.MvcLibrary.AdminPanel
                 sb.AppendLine($@"<li><a href='{item.Url}' class='{item.ButtonClass}' {target}>{item.Title}</a></li>");
             }
         }
-
         internal static void AddMenuSubItem(StringBuilder sb, List<EditorPageMenuSubItem> menu)
         {
             foreach (var item in menu)
@@ -26,7 +25,6 @@ namespace Buran.Core.MvcLibrary.AdminPanel
                 sb.AppendLine($@"<a href='{item.Url}' class='dropdown-item {item.ButtonClass}' {target}>{item.Title}</a>");
             }
         }
-
         internal static void AddMenuSplit(StringBuilder sb, List<EditorPageMenuSplitItem> menu)
         {
             foreach (var item in menu)
@@ -44,7 +42,6 @@ namespace Buran.Core.MvcLibrary.AdminPanel
                 sb.AppendLine(btnText);
             }
         }
-
         public static HtmlString PageMenu(this IHtmlHelper helper, EditorPageMenu menu)
         {
             if (menu.Items.Count == 0)
@@ -135,13 +132,13 @@ namespace Buran.Core.MvcLibrary.AdminPanel
 
 
 
-        public static HtmlString PageMenu2(this IHtmlHelper helper, EditorPageMenu menu)
+        public static HtmlString PageMenu2(this IHtmlHelper helper, EditorPageMenu menu, string cssClass = "navbar-nav mr-auto navbar-toolbar")
         {
             if (menu.Items.Count == 0)
                 return new HtmlString(string.Empty);
 
             var sb = new StringBuilder();
-            sb.AppendLine("<ul class='navbar-nav mr-auto navbar-toolbar'>");
+            sb.AppendLine($"<ul class='{cssClass}'>");
             foreach (var item in menu.Items)
             {
                 if (item.Items.Count == 0 && item.SplitItems.Count == 0)
