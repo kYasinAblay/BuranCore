@@ -462,7 +462,7 @@ namespace Buran.Core.MvcLibrary.Grid4
                 builder.AppendHtml("<td></td>");
                 return builder.GetString();
             }
-            builder.AppendHtml("<td class='btn-group'>");
+            builder.AppendHtml("<td><div class='btn-group'>");
             foreach (var command in commands)
             {
                 if (command.Ajax)
@@ -473,7 +473,7 @@ data-posturl='{command.Url}' data-confirm='{command.Confirm}'>{command.Title}</a
                 else
                     builder.AppendHtml($"<a href='{command.Url}' class='{command.Css}'>{command.Title}</a>");
             }
-            builder.AppendHtml("</td>");
+            builder.AppendHtml("</div></td>");
             return builder.GetString();
         }
 
