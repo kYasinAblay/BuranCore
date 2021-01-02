@@ -11,5 +11,6 @@
         public string Title { get; set; }
         public string Confirm { get; set; }
         public string Css { get; set; }
+        public string Target { get; set; }
     }
 }
