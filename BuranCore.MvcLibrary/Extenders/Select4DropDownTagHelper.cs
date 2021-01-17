@@ -200,8 +200,6 @@ namespace Buran.Core.MvcLibrary.Extenders
                 ItemList = comboDataInfo.ListItems;
             }
             var sbOptions = new StringBuilder();
-            if (CanClearSelect)
-                sbOptions.AppendLine(string.Concat("<option value=\"\"></option>"));
             if (ItemList != null)
             {
                 foreach (var item in ItemList)
