@@ -202,14 +202,38 @@ namespace Buran.Core.MvcLibrary.Extenders
             var sbOptions = new StringBuilder();
             if (ItemList != null)
             {
-                foreach (var item in ItemList)
+                if (ItemList.DataGroupField.IsEmpty())
                 {
-                    var option = new TagBuilder("option");
-                    option.Attributes.Add("value", item.Value);
-                    if (item.Selected)
-                        option.Attributes.Add("selected", "selected");
-                    option.InnerHtml.AppendHtml(item.Text);
-                    sbOptions.AppendLine(option.GetString());
+                    foreach (var item in ItemList)
+                    {
+                        var option = new TagBuilder("option");
+                        option.Attributes.Add("value", item.Value);
+                        if (item.Selected)
+                            option.Attributes.Add("selected", "selected");
+                        option.InnerHtml.AppendHtml(item.Text);
+                        sbOptions.AppendLine(option.GetString());
+                    }
+                }
+                else
+                {
+                    var gList = ItemList.Select(d => d.Group).Distinct().OrderBy(d => d.Name).ToList();
+                    foreach (var g in gList)
+                    {
+                        var optionGroup = new TagBuilder("optgroup");
+                        optionGroup.Attributes.Add("label", g.Name);
+
+                        var gItemList = ItemList.Where(d => d.Group.Name == g.Name).ToList();
+                        foreach (var item in gItemList)
+                        {
+                            var option = new TagBuilder("option");
+                            option.Attributes.Add("value", item.Value);
+                            if (item.Selected)
+                                option.Attributes.Add("selected", "selected");
+                            option.InnerHtml.AppendHtml(item.Text);
+                            optionGroup.InnerHtml.AppendHtml(option.GetString());
+                        }
+                        sbOptions.AppendLine(optionGroup.GetString());
+                    }
                 }
             }
             else if (ItemList2 != null)
