@@ -337,7 +337,10 @@ namespace Buran.Core.MvcLibrary.Grid4
             var builder = new HtmlContentBuilder();
             if (!option.ButtonShowEnabled && !option.ButtonRefreshEnabled && !option.ButtonDeleteEnabled && !option.ButtonEditEnabled && option.Buttons.Count <= 0)
                 return "";
-            builder.AppendHtml("<td>");
+            var width = string.Empty;
+            if (option.ButtonColumnWidth > 0)
+                width = " width='" + option.ButtonColumnWidth + "'";
+            builder.AppendHtml($"<td{width}>");
             builder.AppendHtml("<div class='btn-group'>");
 
             var keyFieldValue = ValueConverter.GetFieldValue(item, option.KeyField);
