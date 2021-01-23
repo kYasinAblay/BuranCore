@@ -58,7 +58,7 @@ namespace Buran.Core.MvcLibrary.Grid4.Helper4
                 List.Add(new FilterInfo { Keyword = field, Condition = kriter, Value = value, Key = key, FilterType = ft });
             }
         }
-        internal string GetKriter(Type fieldType, int kriterId, string caption, string name)
+        internal string GetKriter(Type fieldType, string caption, string name)
         {
             var builder = new StringBuilder();
             if (fieldType == typeof(string))
@@ -109,33 +109,17 @@ namespace Buran.Core.MvcLibrary.Grid4.Helper4
                 if (currentFilter != null)
                 {
                     int.TryParse(currentFilter.Condition, out kriterId);
-                    switch (currentFilter.Condition)
+                    kriterYazi += currentFilter.Condition switch
                     {
-                        case "2":
-                            kriterYazi += "<";
-                            break;
-                        case "3":
-                            kriterYazi += ">";
-                            break;
-                        case "4":
-                            kriterYazi += "<=";
-                            break;
-                        case "5":
-                            kriterYazi += ">=";
-                            break;
-                        case "6":
-                            kriterYazi += "İle Başlayan";
-                            break;
-                        case "7":
-                            kriterYazi += "İçeren";
-                            break;
-                        case "8":
-                            kriterYazi += "İle Biten";
-                            break;
-                        default:
-                            kriterYazi += "İçeren";
-                            break;
-                    }
+                        "2" => "<",
+                        "3" => ">",
+                        "4" => "<=",
+                        "5" => ">=",
+                        "6" => "İle Başlayan",
+                        "7" => "İçeren",
+                        "8" => "İle Biten",
+                        _ => "İçeren",
+                    };
                 }
                 else
                 {
@@ -204,33 +188,17 @@ namespace Buran.Core.MvcLibrary.Grid4.Helper4
                     if (currentFilter != null)
                     {
                         int.TryParse(currentFilter.Condition, out conditionId);
-                        switch (currentFilter.Condition)
+                        conditionTitle += currentFilter.Condition switch
                         {
-                            case "2":
-                                conditionTitle += "<";
-                                break;
-                            case "3":
-                                conditionTitle += ">";
-                                break;
-                            case "4":
-                                conditionTitle += "<=";
-                                break;
-                            case "5":
-                                conditionTitle += ">=";
-                                break;
-                            case "6":
-                                conditionTitle += "İle Başlayan";
-                                break;
-                            case "7":
-                                conditionTitle += "İçeren";
-                                break;
-                            case "8":
-                                conditionTitle += "İle Biten";
-                                break;
-                            default:
-                                conditionTitle += "İçeren";
-                                break;
-                        }
+                            "2" => "<",
+                            "3" => ">",
+                            "4" => "<=",
+                            "5" => ">=",
+                            "6" => "İle Başlayan",
+                            "7" => "İçeren",
+                            "8" => "İle Biten",
+                            _ => "İçeren",
+                        };
                     }
                     else
                     {
@@ -243,7 +211,7 @@ namespace Buran.Core.MvcLibrary.Grid4.Helper4
             <ul class='dropdown-menu'>
             ", conditionTitle, fReplace, conditionId));
 
-                    builder.AppendLine(GetKriter(fieldType, conditionId, field.Caption, fReplace));
+                    builder.AppendLine(GetKriter(fieldType, field.Caption, fReplace));
                     builder.AppendLine("</ul></div>");
                     builder.AppendLine(string.Format("<input type='textbox' id='s_{0}' class='form-control input-sm col-sm-6 txtSearch {2}' value='{1}' data-ft='{3}' />",
                                       fReplace, field.FilterValue,
@@ -380,7 +348,7 @@ namespace Buran.Core.MvcLibrary.Grid4.Helper4
             return w;
         }
 
-        public string ActiveFilter(int colCount, List<DataColumn> fields)
+        public string ActiveFilter(int colCount)
         {
             var qc = new List<KeyValuePair<string, string>>(_queryItems);
             foreach (var item in List)

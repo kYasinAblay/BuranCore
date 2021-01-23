@@ -22,7 +22,7 @@ namespace Buran.Core.MvcLibrary.Reflection
                     return displayAttribute;
                 }
             }
-            return default(T);
+            return default;
         }
 
         public static string GetTableName(Type type, bool clearTire = false)
@@ -31,8 +31,7 @@ namespace Buran.Core.MvcLibrary.Reflection
             var data = type.GetCustomAttributes(typeof(TableAttribute), false);
             if (data.Any())
             {
-                var tableAttribute = data.First() as TableAttribute;
-                if (tableAttribute != null)
+                if (data.First() is TableAttribute tableAttribute)
                 {
                     r = tableAttribute.Name;
                 }

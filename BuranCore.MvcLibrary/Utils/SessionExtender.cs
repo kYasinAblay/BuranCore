@@ -16,7 +16,7 @@ namespace Buran.Core.MvcLibrary.Utils
             var value = session.GetString(key);
 
             return value == null
-                ? default(T)
+                ? default
                 : JsonConvert.DeserializeObject<T>(value);
         }
     }

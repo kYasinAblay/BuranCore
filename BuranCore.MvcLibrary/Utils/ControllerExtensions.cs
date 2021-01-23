@@ -18,17 +18,15 @@ namespace Buran.Core.MvcLibrary.Utils
             if (viewName.IsEmpty())
                 viewName = controller.ControllerContext.ActionDescriptor.ActionName;
             controller.ViewData.Model = model;
-            using (var writer = new StringWriter())
-            {
-                IViewEngine viewEngine = controller.HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
-                ViewEngineResult viewResult = viewEngine.FindView(controller.ControllerContext, viewName, !partial);
-                if (viewResult.Success == false)
-                    return $"{viewName} bulunamadı";
-                ViewContext viewContext = new ViewContext(controller.ControllerContext, viewResult.View,
-                    controller.ViewData, controller.TempData, writer, new HtmlHelperOptions());
-                await viewResult.View.RenderAsync(viewContext);
-                return writer.GetStringBuilder().ToString();
-            }
+            using var writer = new StringWriter();
+            IViewEngine viewEngine = controller.HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
+            ViewEngineResult viewResult = viewEngine.FindView(controller.ControllerContext, viewName, !partial);
+            if (viewResult.Success == false)
+                return $"{viewName} bulunamadı";
+            ViewContext viewContext = new ViewContext(controller.ControllerContext, viewResult.View,
+                controller.ViewData, controller.TempData, writer, new HtmlHelperOptions());
+            await viewResult.View.RenderAsync(viewContext);
+            return writer.GetStringBuilder().ToString();
         }
 
         public static async Task<string> RenderViewAsync<TModel>(this ViewContext controller, string viewName, TModel model)
@@ -37,16 +35,14 @@ namespace Buran.Core.MvcLibrary.Utils
             {
                 Model = model
             };
-            using (var writer = new StringWriter())
-            {
-                IViewEngine viewEngine = controller.HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
-                ViewEngineResult viewResult = viewEngine.FindView(controller, viewName, false);
-                if (viewResult.Success == false)
-                    return $"{viewName} bulunamadı";
-                ViewContext viewContext = new ViewContext(controller.GetActionContext(), viewResult.View, viewData, controller.TempData, writer, new HtmlHelperOptions());
-                await viewResult.View.RenderAsync(viewContext);
-                return writer.GetStringBuilder().ToString();
-            }
+            using var writer = new StringWriter();
+            IViewEngine viewEngine = controller.HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
+            ViewEngineResult viewResult = viewEngine.FindView(controller, viewName, false);
+            if (viewResult.Success == false)
+                return $"{viewName} bulunamadı";
+            ViewContext viewContext = new ViewContext(controller.GetActionContext(), viewResult.View, viewData, controller.TempData, writer, new HtmlHelperOptions());
+            await viewResult.View.RenderAsync(viewContext);
+            return writer.GetStringBuilder().ToString();
         }
 
         public static ActionContext GetActionContext(this ViewContext controller)

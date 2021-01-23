@@ -18,7 +18,7 @@ namespace Buran.Core.MvcLibrary.Grid.Helper
         public string CleanQueryString { get; set; }
         //private UrlHelper urlHelper { get; set; }
 
-        public Sorter(List<KeyValuePair<string, string>> query, string sortKeyword, string pagerAndShortAction, IHtmlHelper helper)
+        public Sorter(List<KeyValuePair<string, string>> query, string sortKeyword, string pagerAndShortAction)
         {
             //urlHelper = new UrlHelper(helper.ViewContext);
             List = new List<SorterInfo>();
@@ -30,7 +30,7 @@ namespace Buran.Core.MvcLibrary.Grid.Helper
                 foreach (var field in sortFields)
                 {
                     var s = field.Split(' ');
-                    if (s.Count() == 2)
+                    if (s.Length == 2)
                     {
                         List.Add(new SorterInfo { Direction = s[1], Keyword = s[0] });
                     }
@@ -44,7 +44,7 @@ namespace Buran.Core.MvcLibrary.Grid.Helper
             CleanQueryString = qq.ToUriComponent().Replace("?", "");
 
             var ci = pagerAndShortAction.Split('?');
-            if (ci.Count() > 1)
+            if (ci.Length > 1)
             {
                 CleanQueryString = CleanQueryString.Replace(ci[1], "");
             }
@@ -62,7 +62,7 @@ namespace Buran.Core.MvcLibrary.Grid.Helper
         public string GetSortImg(string fieldName)
         {
             var sortingData = List.Where(d => d.Keyword == fieldName);
-            if (sortingData.Count() > 0)
+            if (sortingData.Any())
             {
                 var sortInfo = sortingData.First();
                 return sortInfo.Direction == "ASC"
@@ -77,7 +77,7 @@ namespace Buran.Core.MvcLibrary.Grid.Helper
         public string GetSortImg4(string fieldName)
         {
             var sortingData = List.Where(d => d.Keyword == fieldName);
-            if (sortingData.Count() > 0)
+            if (sortingData.Any())
             {
                 var sortInfo = sortingData.First();
                 return sortInfo.Direction == "ASC"

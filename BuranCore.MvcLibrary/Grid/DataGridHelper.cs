@@ -42,10 +42,10 @@ namespace Buran.Core.MvcLibrary.Grid
                 return new HtmlString(content.GetString());
             }
 
-            var _sorter = new Sorter(_queryItems, option.SortKeyword, option.PagerAndShortAction, helper);
+            var _sorter = new Sorter(_queryItems, option.SortKeyword, option.PagerAndShortAction);
             var _filter = new Filter(_queryDictionary, _queryItems, option.PagerKeyword,
                    helper.ViewContext.RouteData, option.PagerAndShortAction,
-                   helper, option.PagerJsFunction, option.GridDiv);
+                   option.PagerJsFunction, option.GridDiv);
 
             if (option.FilteringEnabled && !(data is PagedList<T>) && !(data is StaticPagedList<T>))
             {
@@ -102,7 +102,7 @@ namespace Buran.Core.MvcLibrary.Grid
             }
             #endregion
 
-            T firstItem = default(T);
+            T firstItem = default;
             if (items != null && items.Any())
                 firstItem = items.First();
             Type firstItemType = null;
@@ -154,7 +154,7 @@ namespace Buran.Core.MvcLibrary.Grid
             writer.AppendHtmlLine($"</tbody>");
             writer.AppendHtmlLine("</table>");
             writer.AppendHtmlLine("</div>");
-            if (option.FilteringEnabled && columns.Count(d => !d.FilterValue.IsEmpty()) > 0)
+            if (option.FilteringEnabled && columns.Any(d => !d.FilterValue.IsEmpty()))
                 writer.AppendHtmlLine(RenderFilterRowFooter(columns, _filter, _colCount));
             if (option.PagerEnabled && (option.PagerLocation == PagerLocationTypes.Bottom || option.PagerLocation == PagerLocationTypes.TopAndBottom))
             {
@@ -431,7 +431,7 @@ namespace Buran.Core.MvcLibrary.Grid
         private static string RenderRowCommandButtons(IEnumerable<DataGridCommand> commands)
         {
             var builder = new HtmlContentBuilder();
-            if (commands == null || commands.Count() == 0)
+            if (commands == null || !commands.Any())
             {
                 builder.AppendHtml("<td></td>");
                 return builder.GetString();
@@ -519,7 +519,7 @@ namespace Buran.Core.MvcLibrary.Grid
                 var pgeIndexli = pageSizeQs.ToUriComponent();
 
                 var ci = option.PagerAndShortAction.Split('?');
-                if (ci.Count() > 1)
+                if (ci.Length > 1)
                     pgeIndexli = pgeIndexli.Replace(ci[1], "");
                 if (pgeIndexli == "?")
                     pgeIndexli = "";
@@ -564,7 +564,7 @@ namespace Buran.Core.MvcLibrary.Grid
 
         private static string RenderFilterRowFooter(IEnumerable<DataColumn> columns, Filter filter, int colCount)
         {
-            return filter.ActiveFilter(colCount, columns.ToList());
+            return filter.ActiveFilter(colCount);
         }
     }
 }

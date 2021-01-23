@@ -29,7 +29,7 @@ namespace Buran.Core.MvcLibrary.AdminPanel
         {
             foreach (var item in menu)
             {
-                var btnText = "";
+                string btnText;
                 if (item.Id.IsEmpty())
                 {
                     var target = item.Target.IsEmpty() ? "" : $" target='{item.Target}'";

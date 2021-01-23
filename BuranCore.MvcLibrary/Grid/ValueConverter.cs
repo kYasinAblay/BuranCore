@@ -19,8 +19,8 @@ namespace Buran.Core.MvcLibrary.Grid
 
     class ValueConverter
     {
-        private static Regex RegexDataFormat = new Regex(@"{(\w+)}", RegexOptions.Compiled & RegexOptions.IgnoreCase);
-        private static Regex RegexDataFormat2 = new Regex(@"{(\w+(\.\w+)+)}", RegexOptions.Compiled & RegexOptions.IgnoreCase);
+        private static readonly Regex RegexDataFormat = new Regex(@"{(\w+)}", RegexOptions.Compiled & RegexOptions.IgnoreCase);
+        private static readonly Regex RegexDataFormat2 = new Regex(@"{(\w+(\.\w+)+)}", RegexOptions.Compiled & RegexOptions.IgnoreCase);
 
         public static string GetFieldValue(object item, string fieldName)
         {
@@ -156,8 +156,7 @@ namespace Buran.Core.MvcLibrary.Grid
                 }
                 if (valType.FullName.IndexOf("System.DateTime") > -1)
                 {
-                    DateTime bVal;
-                    label = helper.Encode(DateTime.TryParse(val.ToString(), out bVal) ? bVal.ToString(field.Format) : val);
+                    label = helper.Encode(DateTime.TryParse(val.ToString(), out DateTime bVal) ? bVal.ToString(field.Format) : val);
                 }
 
                 r += "<a href='" + valUrl + "'";
@@ -205,8 +204,7 @@ namespace Buran.Core.MvcLibrary.Grid
                 }
                 else if (valType.FullName == "System.Boolean")
                 {
-                    bool bVal;
-                    if (bool.TryParse(val.ToString(), out bVal))
+                    if (bool.TryParse(val.ToString(), out bool bVal))
                     {
                         r += "<input type='checkbox' disabled='disabled' value='" + bVal + "'";
                         if (bVal)
@@ -223,18 +221,15 @@ namespace Buran.Core.MvcLibrary.Grid
                 }
                 else if (valType.FullName.IndexOf("System.DateTime") > -1)
                 {
-                    DateTime bVal;
-                    r = helper.Encode(DateTime.TryParse(val.ToString(), out bVal) ? bVal.ToString(field.Format) : val);
+                    r = helper.Encode(DateTime.TryParse(val.ToString(), out DateTime bVal) ? bVal.ToString(field.Format) : val);
                 }
                 else if (valType.FullName.IndexOf("System.Int32") > -1)
                 {
-                    int bVal;
-                    r = helper.Encode(int.TryParse(val.ToString(), out bVal) ? bVal.ToString(field.Format) : val);
+                    r = helper.Encode(int.TryParse(val.ToString(), out int bVal) ? bVal.ToString(field.Format) : val);
                 }
                 else if (valType.FullName.IndexOf("System.Decimal") > -1)
                 {
-                    decimal bVal;
-                    r = helper.Encode(decimal.TryParse(val.ToString(), out bVal) ? bVal.ToString(field.Format) : val);
+                    r = helper.Encode(decimal.TryParse(val.ToString(), out decimal bVal) ? bVal.ToString(field.Format) : val);
                 }
                 else
                 {

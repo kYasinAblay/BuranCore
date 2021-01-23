@@ -11,20 +11,16 @@ namespace Buran.Core.Library.Utils
         public static T Deserialize<T>(string input) where T : class
         {
             var ser = new XmlSerializer(typeof(T));
-            using (var sr = new StringReader(input))
-            {
-                return (T)ser.Deserialize(sr);
-            }
+            using var sr = new StringReader(input);
+            return (T)ser.Deserialize(sr);
         }
 
         public static string Serialize<T>(T ObjectToSerialize)
         {
             var xmlSerializer = new XmlSerializer(ObjectToSerialize.GetType());
-            using (var textWriter = new StringWriter())
-            {
-                xmlSerializer.Serialize(textWriter, ObjectToSerialize);
-                return textWriter.ToString();
-            }
+            using var textWriter = new StringWriter();
+            xmlSerializer.Serialize(textWriter, ObjectToSerialize);
+            return textWriter.ToString();
         }
 
         public static string ConvertToHtmlFromBase64(string xslDataBase64, string xmlData)
@@ -36,28 +32,16 @@ namespace Buran.Core.Library.Utils
 
         public static string ConvertToHtml(string xslData, string xmlData)
         {
-            using (var srt = new StringReader(xslData))
-            {
-                using (var sri = new StringReader(xmlData))
-                {
-                    using (var xrt = XmlReader.Create(srt))
-                    {
-                        using (var xri = XmlReader.Create(sri))
-                        {
-                            var xslt = new XslCompiledTransform();
-                            xslt.Load(xrt);
-                            using (var sw = new StringWriter())
-                            {
-                                using (var xwo = XmlWriter.Create(sw, xslt.OutputSettings))
-                                {
-                                    xslt.Transform(xri, xwo);
-                                    return sw.ToString();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            using var srt = new StringReader(xslData);
+            using var sri = new StringReader(xmlData);
+            using var xrt = XmlReader.Create(srt);
+            using var xri = XmlReader.Create(sri);
+            var xslt = new XslCompiledTransform();
+            xslt.Load(xrt);
+            using var sw = new StringWriter();
+            using var xwo = XmlWriter.Create(sw, xslt.OutputSettings);
+            xslt.Transform(xri, xwo);
+            return sw.ToString();
         }
     }
 }

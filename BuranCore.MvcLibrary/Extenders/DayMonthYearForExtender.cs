@@ -23,19 +23,21 @@ namespace Buran.Core.MvcLibrary.Extenders
             {
                 if (_months == null)
                 {
-                    _months = new List<ComboBoxItem>();
-                    _months.Add(new ComboBoxItem { Id = 1, Text = UI.Month_1 });
-                    _months.Add(new ComboBoxItem { Id = 2, Text = UI.Month_2 });
-                    _months.Add(new ComboBoxItem { Id = 3, Text = UI.Month_3 });
-                    _months.Add(new ComboBoxItem { Id = 4, Text = UI.Month_4 });
-                    _months.Add(new ComboBoxItem { Id = 5, Text = UI.Month_5 });
-                    _months.Add(new ComboBoxItem { Id = 6, Text = UI.Month_6 });
-                    _months.Add(new ComboBoxItem { Id = 7, Text = UI.Month_7 });
-                    _months.Add(new ComboBoxItem { Id = 8, Text = UI.Month_8 });
-                    _months.Add(new ComboBoxItem { Id = 9, Text = UI.Month_9 });
-                    _months.Add(new ComboBoxItem { Id = 10, Text = UI.Month_10 });
-                    _months.Add(new ComboBoxItem { Id = 11, Text = UI.Month_11 });
-                    _months.Add(new ComboBoxItem { Id = 12, Text = UI.Month_12 });
+                    _months = new List<ComboBoxItem>
+                    {
+                        new ComboBoxItem { Id = 1, Text = UI.Month_1 },
+                        new ComboBoxItem { Id = 2, Text = UI.Month_2 },
+                        new ComboBoxItem { Id = 3, Text = UI.Month_3 },
+                        new ComboBoxItem { Id = 4, Text = UI.Month_4 },
+                        new ComboBoxItem { Id = 5, Text = UI.Month_5 },
+                        new ComboBoxItem { Id = 6, Text = UI.Month_6 },
+                        new ComboBoxItem { Id = 7, Text = UI.Month_7 },
+                        new ComboBoxItem { Id = 8, Text = UI.Month_8 },
+                        new ComboBoxItem { Id = 9, Text = UI.Month_9 },
+                        new ComboBoxItem { Id = 10, Text = UI.Month_10 },
+                        new ComboBoxItem { Id = 11, Text = UI.Month_11 },
+                        new ComboBoxItem { Id = 12, Text = UI.Month_12 }
+                    };
                 }
                 return _months;
             }

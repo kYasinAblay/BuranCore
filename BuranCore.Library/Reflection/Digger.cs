@@ -62,7 +62,7 @@ namespace Buran.Core.Library.Reflection
                     return dict.ContainsKey(propertyName) ? dict[propertyName] : string.Empty;
                 }
                 var property = source.GetType().GetProperty(propertyName);
-                return property != null ? property.GetValue(source, null) : null;
+                return property?.GetValue(source, null);
             }
             return null;
         }

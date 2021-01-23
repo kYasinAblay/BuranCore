@@ -149,12 +149,12 @@ namespace Buran.Core.MvcLibrary.Extenders
                         var a = repo.GetMethod(comboDataModel.QueryName);
                         if (a == null)
                             return null;
-                        if (a.GetParameters().Count() == 1)
+                        if (a.GetParameters().Length == 1)
                         {
                             var dataList = a.Invoke(obj, new object[1] { metadata.Model });
                             result.ListItems = dataList as SelectList;
                         }
-                        else if (a.GetParameters().Count() == 2)
+                        else if (a.GetParameters().Length == 2)
                         {
                             var dataList = a.Invoke(obj, new object[2] { metadata.Model, false });
                             result.ListItems = dataList as SelectList;

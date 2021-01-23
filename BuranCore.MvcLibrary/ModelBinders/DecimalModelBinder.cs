@@ -11,10 +11,6 @@ namespace Buran.Core.MvcLibrary.ModelBinders
         {
             var value = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
             bindingContext.ModelState.SetModelValue(bindingContext.ModelName, value);
-            if (value == null)
-            {
-                return null;
-            }
 
             Decimal? retVal = null;
             try

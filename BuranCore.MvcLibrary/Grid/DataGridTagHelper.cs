@@ -44,8 +44,8 @@ namespace Buran.Core.MvcLibrary.Extenders
 
         private Sorter _sorter;
         private Filter _filter;
-        private string _refreshUrl = string.Empty;
-        private int _colCount;
+        //private string _refreshUrl = string.Empty;
+        //private int _colCount;
         private QueryString _query;
         private Dictionary<string, StringValues> _queryDictionary;
         private List<KeyValuePair<string, string>> _queryItems;
@@ -70,7 +70,7 @@ namespace Buran.Core.MvcLibrary.Extenders
                 }
             }
 
-            _colCount = 0;
+            //_colCount = 0;
             var items = ModelData;
             if (items == null)
             {
@@ -78,10 +78,10 @@ namespace Buran.Core.MvcLibrary.Extenders
                 return;
             }
 
-            _sorter = new Sorter(_queryItems, Options.SortKeyword, Options.PagerAndShortAction, _htmlHelper);
+            _sorter = new Sorter(_queryItems, Options.SortKeyword, Options.PagerAndShortAction);
             _filter = new Filter(_queryDictionary, _queryItems, Options.PagerKeyword,
                 _htmlHelper.ViewContext.RouteData, Options.PagerAndShortAction,
-                _htmlHelper, Options.PagerJsFunction, Options.GridDiv);
+                Options.PagerJsFunction, Options.GridDiv);
 
             if (Options.FilteringEnabled) // && !(data is PagedList<T>) && !(data is StaticPagedList<T>))
             {
@@ -153,7 +153,7 @@ namespace Buran.Core.MvcLibrary.Extenders
             //    firstItemType = firstItem.GetType();
 
             var writer = new StringBuilder();
-            _refreshUrl = GetRefreshUrl(_htmlHelper, Options);
+            //_refreshUrl = GetRefreshUrl(_htmlHelper, Options);
 
             if (Options.PagerEnabled && (Options.PagerLocation == PagerLocationTypes.Top || Options.PagerLocation == PagerLocationTypes.TopAndBottom))
             {

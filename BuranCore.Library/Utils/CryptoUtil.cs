@@ -20,30 +20,26 @@ namespace Buran.Core.Library.Utils
             var keyData = Encoding.UTF8.GetBytes(key);
             var saltData = Encoding.UTF8.GetBytes(salt);
 
-            using (Aes cryp = Aes.Create())
-            {
-                cryp.BlockSize = blockSize;
-                cryp.KeySize = keySize;
-                cryp.Mode = mode;
-                cryp.Key = keyData;
-                cryp.IV = saltData;
-                cryp.Padding = padding;
+            using Aes cryp = Aes.Create();
+            cryp.BlockSize = blockSize;
+            cryp.KeySize = keySize;
+            cryp.Mode = mode;
+            cryp.Key = keyData;
+            cryp.IV = saltData;
+            cryp.Padding = padding;
 
-                byte[] encrypted;
-                ICryptoTransform encryptor = cryp.CreateEncryptor(cryp.Key, cryp.IV);
-                using (MemoryStream msEncrypt = new MemoryStream())
+            byte[] encrypted;
+            ICryptoTransform encryptor = cryp.CreateEncryptor(cryp.Key, cryp.IV);
+            using (MemoryStream msEncrypt = new MemoryStream())
+            {
+                using CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write);
+                using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
                 {
-                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                    {
-                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
-                        {
-                            swEncrypt.Write(text);
-                        }
-                        encrypted = msEncrypt.ToArray();
-                    }
+                    swEncrypt.Write(text);
                 }
-                return encrypted;
+                encrypted = msEncrypt.ToArray();
             }
+            return encrypted;
         }
 
         public string AesDecrypt(byte[] data, string key, string salt,
@@ -52,67 +48,57 @@ namespace Buran.Core.Library.Utils
             var keyData = Encoding.UTF8.GetBytes(key);
             var saltData = Encoding.UTF8.GetBytes(salt);
 
-            using (Aes cryp = Aes.Create())
-            {
-                cryp.BlockSize = blockSize;
-                cryp.KeySize = keySize;
-                cryp.Mode = mode;
-                cryp.Key = keyData;
-                cryp.IV = saltData;
-                cryp.Padding = padding;
+            using Aes cryp = Aes.Create();
+            cryp.BlockSize = blockSize;
+            cryp.KeySize = keySize;
+            cryp.Mode = mode;
+            cryp.Key = keyData;
+            cryp.IV = saltData;
+            cryp.Padding = padding;
 
-                string plaintext = null;
-                ICryptoTransform decryptor = cryp.CreateDecryptor(cryp.Key, cryp.IV);
-                using (MemoryStream msDecrypt = new MemoryStream(data))
-                {
-                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                    {
-                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
-                        {
-                            plaintext = srDecrypt.ReadToEnd();
-                        }
-                    }
-                }
-                return plaintext;
+            string plaintext = null;
+            ICryptoTransform decryptor = cryp.CreateDecryptor(cryp.Key, cryp.IV);
+            using (MemoryStream msDecrypt = new MemoryStream(data))
+            {
+                using CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read);
+                using StreamReader srDecrypt = new StreamReader(csDecrypt);
+                plaintext = srDecrypt.ReadToEnd();
             }
+            return plaintext;
         }
 
 
         public RsaKey GetRsaKey(int keySize = 4096)
         {
-            using (var rsa = new RSACryptoServiceProvider(keySize))
+            using var rsa = new RSACryptoServiceProvider(keySize);
+            try
             {
-                try
-                {
-                    var pp = rsa.ToXmlString(true);
-                    var pu = rsa.ToXmlString(false);
-                    var b64pp = pp.ToBase64();
-                    var b64pu = pu.ToBase64();
-                    var rk = new RsaKey { Public = b64pu, Private = b64pp };
-                    return rk;
-                }
-                finally
-                {
-                    rsa.PersistKeyInCsp = false;
-                }
+                var pp = rsa.ToXmlString(true);
+                var pu = rsa.ToXmlString(false);
+                var b64pp = pp.ToBase64();
+                var b64pu = pu.ToBase64();
+                var rk = new RsaKey { Public = b64pu, Private = b64pp };
+                return rk;
+            }
+            finally
+            {
+                rsa.PersistKeyInCsp = false;
             }
         }
 
         public string RsaEncrypt(string text, string publicKey, int keySize = 4096)
         {
             var textData = Encoding.UTF8.GetBytes(text);
-            using (var rsa = new RSACryptoServiceProvider(keySize))
+            using var rsa = new RSACryptoServiceProvider(keySize);
+            try
             {
-                try
-                {
-                    rsa.FromXmlString(publicKey.FromBase64());
-                    var encryptedData = rsa.Encrypt(textData, true);
-                    return Convert.ToBase64String(encryptedData);
-                }
-                finally
-                {
-                    rsa.PersistKeyInCsp = false;
-                }
+                rsa.FromXmlString(publicKey.FromBase64());
+                var encryptedData = rsa.Encrypt(textData, true);
+                return Convert.ToBase64String(encryptedData);
+            }
+            finally
+            {
+                rsa.PersistKeyInCsp = false;
             }
         }
 
@@ -121,19 +107,17 @@ namespace Buran.Core.Library.Utils
             try
             {
                 var textData = Encoding.UTF8.GetBytes(text);
-                using (var rsa = new RSACryptoServiceProvider(keySize))
+                using var rsa = new RSACryptoServiceProvider(keySize);
+                try
                 {
-                    try
-                    {
-                        rsa.FromXmlString(privateKey.FromBase64());
-                        var resultBytes = Convert.FromBase64String(text);
-                        var decryptedBytes = rsa.Decrypt(resultBytes, true);
-                        return Encoding.UTF8.GetString(decryptedBytes);
-                    }
-                    finally
-                    {
-                        rsa.PersistKeyInCsp = false;
-                    }
+                    rsa.FromXmlString(privateKey.FromBase64());
+                    var resultBytes = Convert.FromBase64String(text);
+                    var decryptedBytes = rsa.Decrypt(resultBytes, true);
+                    return Encoding.UTF8.GetString(decryptedBytes);
+                }
+                finally
+                {
+                    rsa.PersistKeyInCsp = false;
                 }
             }
             catch

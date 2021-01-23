@@ -27,10 +27,6 @@ namespace Buran.Core.MvcLibrary.ModelBinders
 
             var value = bindingContext.ValueProvider.GetValue(key);
             bindingContext.ModelState.SetModelValue(key, value);
-            if (value == null)
-            {
-                return null;
-            }
 
             string retVal = "";
             try
@@ -64,10 +60,6 @@ namespace Buran.Core.MvcLibrary.ModelBinders
 
             var value = bindingContext.ValueProvider.GetValue(key);
             bindingContext.ModelState.SetModelValue(key, value);
-            if (value == null)
-            {
-                return null;
-            }
 
             int? retVal = null;
             try

@@ -14,13 +14,11 @@ namespace Buran.Core.Library.Utils
 
         public static string ToUtcDateTimeString(this DateTime date)
         {
-            string result = "";
             int year = date.Year;
             int month = date.Month;
             int day = date.Day;
             int hour = date.Hour;
             int minute = date.Minute;
-            int second = date.Second;
 
             StringBuilder sb = new StringBuilder();
             sb.Append(year.ToString());
@@ -33,10 +31,7 @@ namespace Buran.Core.Library.Utils
             sb.Append(":");
             sb.Append(minute.ToString().PadLeft(2, '0'));
             sb.Append("+03:00");
-
-            result = sb.ToString();
-
-            return result;
+            return sb.ToString();
         }
 
 
@@ -48,8 +43,10 @@ namespace Buran.Core.Library.Utils
         }
         public static WeekInfo GetWeekInfo(this DateTime date)
         {
-            var result = new WeekInfo();
-            result.WeekNumber = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Friday);
+            var result = new WeekInfo
+            {
+                WeekNumber = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Friday)
+            };
             var dw = (int)date.DayOfWeek;
             dw += 2;
             if (dw > 6)
