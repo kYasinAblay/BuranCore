@@ -39,7 +39,6 @@ namespace Buran.Core.MvcLibrary.Extenders
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             (_htmlHelper as IViewContextAware).Contextualize(ViewContext);
-            //var prefix = ViewContext.ViewData.TemplateInfo.HtmlFieldPrefix;
 
             output.TagName = "label";
             output.TagMode = TagMode.StartTagAndEndTag;
@@ -50,6 +49,7 @@ namespace Buran.Core.MvcLibrary.Extenders
                 var required = new TagBuilder("span");
                 required.AddCssClass(RequiredCssClass);
                 required.InnerHtml.AppendHtml(Symbol);
+
                 output.Content.SetHtmlContent(Text + required.GetString());
             }
             else

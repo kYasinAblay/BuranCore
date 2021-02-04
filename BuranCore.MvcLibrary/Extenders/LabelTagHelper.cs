@@ -75,6 +75,7 @@ namespace Buran.Core.MvcLibrary.Extenders
                     var required = new TagBuilder("span");
                     required.AddCssClass(RequiredCssClass);
                     required.InnerHtml.AppendHtml(Symbol);
+
                     output.Content.SetHtmlContent(labelText + required.GetString());
                 }
                 else

@@ -8,7 +8,6 @@ using System.Linq;
 
 namespace Buran.Core.MvcLibrary.Extenders
 {
-    [Obsolete]
     [HtmlTargetElement("select2")]
     public class Select2TagHelper : TagHelper
     {

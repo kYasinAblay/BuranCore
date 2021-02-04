@@ -15,7 +15,6 @@ using System.Text;
 
 namespace Buran.Core.MvcLibrary.Extenders
 {
-    [Obsolete]
     [HtmlTargetElement("select2dropdown")]
     public class Select2DropDownTagHelper : TagHelper
     {

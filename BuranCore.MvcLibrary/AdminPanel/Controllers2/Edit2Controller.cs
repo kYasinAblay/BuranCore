@@ -139,18 +139,19 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
 
         public virtual void OnCreateSaveItem(T item)
         {
-
         }
         public virtual void OnAfterCreateSaveItem(T item)
         {
-
         }
         public virtual void OnErrorCreateSaveItem(T item)
         {
-
         }
 
 
+        public virtual bool OnCreateSaveCheck(T item)
+        {
+            return true;
+        }
         [HttpPost]
         public virtual async Task<IActionResult> Create(int keepEdit, T item)
         {
@@ -160,18 +161,22 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
             try
             {
                 OnCreateSaveItem(item);
-                if (await Repo.CreateAsync(item))
+                if (OnCreateSaveCheck(item))
                 {
-                    OnAfterCreateSaveItem(item);
-                    if (keepEdit == 0)
-                        return CreateReturnListUrl.IsEmpty() ? (ActionResult)RedirectToAction("Index") : Redirect(CreateReturnListUrl);
-                    if (keepEdit == 1)
+                    if (await Repo.CreateAsync(item))
                     {
-                        var itemIdValue = Digger.GetObjectValue(item, keyFieldName);
-                        return RedirectToAction("Edit", new { id = itemIdValue });
+                        OnAfterCreateSaveItem(item);
+                        if (keepEdit == 0)
+                            return CreateReturnListUrl.IsEmpty() ? (ActionResult)RedirectToAction("Index") : Redirect(CreateReturnListUrl);
+                        if (keepEdit == 1)
+                        {
+                            var itemIdValue = Digger.GetObjectValue(item, keyFieldName);
+                            return RedirectToAction("Edit", new { id = itemIdValue });
+                        }
+                        return CreateSaveAndCreateUrl.IsEmpty() ? (ActionResult)RedirectToAction("Create") : Redirect(CreateSaveAndCreateUrl);
                     }
-                    return CreateSaveAndCreateUrl.IsEmpty() ? (ActionResult)RedirectToAction("Create") : Redirect(CreateSaveAndCreateUrl);
                 }
+                return new ForbidResult();
             }
             catch (Exception ex)
             {
@@ -197,16 +202,17 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
             try
             {
                 OnCreateSaveItem(item);
-                if (await Repo.CreateAsync(item))
+                if (OnCreateSaveCheck(item))
                 {
-                    OnAfterCreateSaveItem(item);
-                    r.Ok = true;
-                    if (!CreateJsAction.IsEmpty())
-                        r.JsFunction = CreateJsAction;
-                }
-                else
-                {
-                    r.Error = MvcLogger.GetErrorMessage(ModelState);
+                    if (await Repo.CreateAsync(item))
+                    {
+                        OnAfterCreateSaveItem(item);
+                        r.Ok = true;
+                        if (!CreateJsAction.IsEmpty())
+                            r.JsFunction = CreateJsAction;
+                    }
+                    else
+                        r.Error = MvcLogger.GetErrorMessage(ModelState);
                 }
             }
             catch (Exception ex)
@@ -353,18 +359,13 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
                                 r.JsFunction = EditJsAction;
                         }
                         else
-                        {
                             r.Error = MvcLogger.GetErrorMessage(ModelState);
-                        }
                     }
                     r.Error = "ERR";
                 }
             }
             else
-            {
                 r.Error = "NOT FOUND";
-            }
-
             return Json(r);
         }
         #endregion

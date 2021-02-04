@@ -275,7 +275,6 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
                 var item = await GetDeleteItem(id);
                 if (item == null)
                     return new JavascriptResult(StringExt.JsAlert(UI.NotFound));
-
                 DeleteGoBackUrl = Url.Action("Index");
                 if (OnDeleteCheck(item))
                 {

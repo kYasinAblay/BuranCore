@@ -15,7 +15,7 @@ using System.Text;
 
 namespace Buran.Core.MvcLibrary.Extenders
 {
-    [Obsolete]
+    //[Obsolete]
     [HtmlTargetElement("select", Attributes = "brn-field")]
     public class ComboBoxTagHelper : TagHelper
     {
