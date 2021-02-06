@@ -291,7 +291,7 @@ namespace Buran.Core.MvcLibrary.Extenders
             }
             select.InnerHtml.AppendHtml(sbOptions.ToString());
 
-            var setToNull = isSelected ? @$"$(""#{htmlId}"").val(null); $(""#{htmlId}"").trigger(""change"");" : "";
+            var setToNull = isSelected ? "" : @$"$(""#{htmlId}"").val(null); $(""#{htmlId}"").trigger(""change"");";
             string js = DisableJs
                 ? ""
                 : $@"
