@@ -199,6 +199,7 @@ namespace Buran.Core.MvcLibrary.Extenders
                 var comboDataInfo = GetComboBoxDataSource(ModelItem.ModelExplorer);
                 ItemList = comboDataInfo.ListItems;
             }
+            var isSelected = false;
             var sbOptions = new StringBuilder();
             if (ItemList != null)
             {
@@ -209,7 +210,10 @@ namespace Buran.Core.MvcLibrary.Extenders
                         var option = new TagBuilder("option");
                         option.Attributes.Add("value", item.Value);
                         if (item.Selected)
+                        {
                             option.Attributes.Add("selected", "selected");
+                            isSelected = true;
+                        }
                         option.InnerHtml.AppendHtml(item.Text);
                         sbOptions.AppendLine(option.GetString());
                     }
@@ -228,7 +232,10 @@ namespace Buran.Core.MvcLibrary.Extenders
                             var option = new TagBuilder("option");
                             option.Attributes.Add("value", item.Value);
                             if (item.Selected)
+                            {
                                 option.Attributes.Add("selected", "selected");
+                                isSelected = true;
+                            }
                             option.InnerHtml.AppendHtml(item.Text);
                             optionGroup.InnerHtml.AppendHtml(option.GetString());
                         }
@@ -243,7 +250,10 @@ namespace Buran.Core.MvcLibrary.Extenders
                     var option = new TagBuilder("option");
                     option.Attributes.Add("value", item.Value);
                     if (item.Selected)
+                    {
                         option.Attributes.Add("selected", "selected");
+                        isSelected = true;
+                    }
                     option.InnerHtml.AppendHtml(item.Text);
                     sbOptions.AppendLine(option.GetString());
                 }
@@ -281,6 +291,7 @@ namespace Buran.Core.MvcLibrary.Extenders
             }
             select.InnerHtml.AppendHtml(sbOptions.ToString());
 
+            var setToNull = isSelected ? @$"$(""#{htmlId}"").val(null); $(""#{htmlId}"").trigger(""change"");" : "";
             string js = DisableJs
                 ? ""
                 : $@"
@@ -294,6 +305,7 @@ $(function () {{
         {(ReadOnly ? "disabled:true," : "")}
         {(CanClearSelect ? "allowClear: true" : "")}
     }});
+    {setToNull}
 }});
 </script>";
 
