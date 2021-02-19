@@ -15,20 +15,5 @@ namespace Buran.Core.MvcLibrary.Utils
                 .ToList();
             return _queryItems;
         }
-
-
-        //public static List<KeyValuePair<string, string>> RemoveItem(this List<KeyValuePair<string, string>> list, string key)
-        //{
-        //    list.RemoveAll(d => d.Key == key);
-
-        //    var item = list.FirstOrDefault(d => d.Key == key);
-        //    if (item!=null)
-
-        //    var _queryDictionary = QueryHelpers.ParseQuery(_query.ToString());
-        //    var _queryItems = _queryDictionary
-        //        .SelectMany(x => x.Value, (col, value) => new KeyValuePair<string, string>(col.Key, value))
-        //        .ToList();
-        //    return _queryItems;
-        //}
     }
 }

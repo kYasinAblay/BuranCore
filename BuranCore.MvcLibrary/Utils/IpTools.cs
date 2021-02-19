@@ -6,21 +6,6 @@ namespace Buran.Core.MvcLibrary.Utils
 {
     public class IpTools
     {
-        //public static string GetIpFromHeader(HttpRequest request)
-        //{
-        //    if (context.Request.Headers.Count > 0)
-        //    {
-        //        foreach (var h in context.Request.Headers)  // .Where(d => listLogHeaders.Contains(d.Key)))
-        //        {
-        //            headerText += h.Key + "=" + h.Value.ToString() + "\r\n";
-        //        }
-        //    }
-
-        //    var ipList = request.HttpContext.Request.s ServerVariables["HTTP_X_FORWARDED_FOR"];
-        //    var ip = !string.IsNullOrEmpty(ipList) ? ipList.Split(',')[0] : request.ServerVariables["REMOTE_ADDR"];
-        //    return ip;
-        //}
-
         public string GetIp(HttpRequest request)
         {
             var ip = request.HttpContext.Connection.RemoteIpAddress;

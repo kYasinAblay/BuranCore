@@ -14,7 +14,7 @@ namespace Buran.Core.MvcLibrary.ModelBinders.Providers
             }
             if (context.Metadata.UnderlyingOrModelType == typeof(DayMonthYear))
             {
-                return new Decimal2ModelBinder();
+                return new DayMonthYearModelBinder();
             }
             return null;
         }

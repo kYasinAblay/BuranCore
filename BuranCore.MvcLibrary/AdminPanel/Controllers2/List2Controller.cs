@@ -6,6 +6,7 @@ using Buran.Core.MvcLibrary.LogUtil;
 using Buran.Core.MvcLibrary.Repository;
 using Buran.Core.MvcLibrary.Resource;
 using Buran.Core.MvcLibrary.Utils;
+using Buran.Core.MvcLibrary.XmlLang;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -171,12 +172,17 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
                 r += "_EditorTitle";
                 suffixName = UI.TitleShow;
             }
+
             if (ResourceMan != null)
             {
                 var rsm = ResourceMan.GetString(r);
                 return (rsm.IsEmpty() ? r : rsm) + suffixName;
             }
-            return string.Empty;
+            else
+            {
+                var rsm = XmlLangHtmlExtender.L(r);
+                return (rsm.IsEmpty() ? r : rsm) + suffixName;
+            }
         }
 
 
