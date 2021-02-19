@@ -201,6 +201,7 @@ namespace Buran.Core.MvcLibrary.Grid
                 if (valType.IsEnum)
                 {
                     r = helper.Encode(EnumHelper.GetEnumDisplayText(valType, (int)val));
+                    r = XmlLang.XmlLangResource.GetResource(r);
                 }
                 else if (valType.FullName == "System.Boolean")
                 {

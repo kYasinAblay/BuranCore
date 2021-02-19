@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>3.2.0</Version>
+		<Version>3.2.1</Version>
 		<Authors>Osman Buran</Authors>
 		<RepositoryUrl>https://github.com/oburan/BuranCore</RepositoryUrl>
 	</PropertyGroup>
