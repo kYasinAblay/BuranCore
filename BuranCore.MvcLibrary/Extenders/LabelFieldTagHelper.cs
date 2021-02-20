@@ -19,7 +19,7 @@ namespace Buran.Core.MvcLibrary.Extenders
         }
     }
     [HtmlTargetElement("label", Attributes = "brn-field")]
-    public class LabelTagHelper : TagHelper
+    public class LabelFieldTagHelper : TagHelper
     {
         [HtmlAttributeName("brn-field")]
         public ModelExpression ModelItem { get; set; }
@@ -41,7 +41,7 @@ namespace Buran.Core.MvcLibrary.Extenders
         [HtmlAttributeNotBound]
         public ViewContext ViewContext { get; set; }
 
-        public LabelTagHelper(IHtmlHelper htmlHelper)
+        public LabelFieldTagHelper(IHtmlHelper htmlHelper)
         {
             RequiredCssClass = "editor-field-required";
             Symbol = " *";

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace Buran.Core.MvcLibrary.Extenders
 {
     [HtmlTargetElement("label", Attributes = "brn-text")]
-    public class Label2TagHelper : TagHelper
+    public class LabelTextTagHelper : TagHelper
     {
         [HtmlAttributeName("brn-text")]
         public string Text { get; set; }
@@ -29,7 +29,7 @@ namespace Buran.Core.MvcLibrary.Extenders
         [HtmlAttributeNotBound]
         public ViewContext ViewContext { get; set; }
 
-        public Label2TagHelper(IHtmlHelper htmlHelper)
+        public LabelTextTagHelper(IHtmlHelper htmlHelper)
         {
             RequiredCssClass = "editor-field-required";
             Symbol = " *";
