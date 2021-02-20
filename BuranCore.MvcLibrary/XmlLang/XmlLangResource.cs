@@ -41,12 +41,18 @@ namespace Buran.Core.MvcLibrary.XmlLang
 
         public static string GetResource(string resourceName)
         {
+            if (_configStore == null)
+                return resourceName;
+
             var cultureInfo = Thread.CurrentThread.CurrentCulture;
             var langCode = cultureInfo.TwoLetterISOLanguageName;
 
             var ql = _defaultLang;
             if (_configStore.ContainsKey(langCode))
                 ql = langCode;
+
+            if (!_configStore.ContainsKey(ql))
+                return resourceName;
 
             var val = _configStore[ql].Items.FirstOrDefault(d => d.Name == resourceName);
             return val == null ? resourceName : val.Value;
@@ -54,12 +60,18 @@ namespace Buran.Core.MvcLibrary.XmlLang
 
         public static LocalizedString GetResourceLocalize(string resourceName)
         {
+            if (_configStore == null)
+                return new LocalizedString(resourceName, resourceName);
+
             var cultureInfo = Thread.CurrentThread.CurrentCulture;
             var langCode = cultureInfo.TwoLetterISOLanguageName;
 
             var ql = _defaultLang;
             if (_configStore.ContainsKey(langCode))
                 ql = langCode;
+
+            if (!_configStore.ContainsKey(ql))
+                return new LocalizedString(resourceName, resourceName);
 
             var val = _configStore[ql].Items.FirstOrDefault(d => d.Name == resourceName);
             return new LocalizedString(resourceName,
@@ -70,12 +82,18 @@ namespace Buran.Core.MvcLibrary.XmlLang
 
         public static LocalizedString GetResourceLocalize(string resourceName, params object[] arguments)
         {
+            if (_configStore == null)
+                return new LocalizedString(resourceName, resourceName);
+
             var cultureInfo = Thread.CurrentThread.CurrentCulture;
             var langCode = cultureInfo.TwoLetterISOLanguageName;
 
             var ql = _defaultLang;
             if (_configStore.ContainsKey(langCode))
                 ql = langCode;
+
+            if (!_configStore.ContainsKey(ql))
+                return new LocalizedString(resourceName, resourceName);
 
             var val = _configStore[ql].Items.FirstOrDefault(d => d.Name == resourceName);
             return new LocalizedString(resourceName,
@@ -86,12 +104,20 @@ namespace Buran.Core.MvcLibrary.XmlLang
 
         public static List<Item> GetAllResources()
         {
+            if (_configStore == null)
+                return null;
+
             var cultureInfo = Thread.CurrentThread.CurrentCulture;
             var langCode = cultureInfo.TwoLetterISOLanguageName;
 
-            return _configStore.ContainsKey(langCode)
-                ? _configStore[langCode].Items
-                : _configStore[_defaultLang].Items;
+            var ql = _defaultLang;
+            if (_configStore.ContainsKey(langCode))
+                ql = langCode;
+
+            if (!_configStore.ContainsKey(ql))
+                return null;
+
+            return _configStore[ql].Items;
         }
     }
 }
