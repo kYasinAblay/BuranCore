@@ -269,6 +269,10 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
         }
 
 
+        public virtual async Task<T> GetEditSaveItem(int id)
+        {
+            return await Repo.GetItemAsync(id);
+        }
         public virtual void OnEditSaveItem(T item)
         {
         }
@@ -297,7 +301,7 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
                 int.TryParse(v.ToString(), out _editId);
                 if (_editId > 0)
                 {
-                    var org = await Repo.GetItemAsync(_editId);
+                    var org = await GetEditSaveItem(_editId);
                     OnEditBeforeSaveItem(item, org);
                     await TryUpdateModelAsync(org);
                     if (OnEditSaveCheck(org))
