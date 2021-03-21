@@ -14,8 +14,8 @@ namespace Buran.Core.MvcLibrary.Extenders
             if (template)
             {
                 var div = $@"<div class='form-group row' id='div{name}'>
-                <label for='{name}' class='col-form-label col-form-label col-sm-{labelCol}'>{title}</label>
-                <div class='col-sm-{editorCol}'>
+                <label for='{name}' class='col-form-label col-form-label col-{labelCol}'>{title}</label>
+                <div class='col-{editorCol}'>
                    {img}
                     <button type='button' class='{cssClass} btn btn-sm btn-default' id='btn{name}'>
                         <i class='fa fa-upload'></i> {UI.Upload}

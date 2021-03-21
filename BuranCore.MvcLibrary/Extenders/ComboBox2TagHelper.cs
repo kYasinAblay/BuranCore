@@ -319,15 +319,15 @@ namespace Buran.Core.MvcLibrary.Extenders
                 var addHtml = "";
                 if (!AddNewUrl.IsEmpty())
                 {
-                    addHtml = $@"<div class='col-sm-1'>
+                    addHtml = $@"<div class='col-1'>
                 <a href='{AddNewUrl}' class='btn btn-sm btn-primary fancyboxAdd fancybox.iframe'><i class='fas fa-plus'></i></a>
             </div>";
                     EditorColCount--;
                 }
 
                 var editorTemplate = $@"
-                    <label class=""col-sm-{LabelColCount} col-form-label col-form-label-sm"">{labelText} {requiredHtml}</label>
-                    <div class=""col-sm-{EditorColCount}"">
+                    <label class=""col-{LabelColCount} col-form-label col-form-label-sm"">{labelText} {requiredHtml}</label>
+                    <div class=""col-{EditorColCount}"">
                         {select.GetString()}
                         {metaHtml}
                     </div>

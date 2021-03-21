@@ -353,8 +353,8 @@ $(function () {{
                         sep = "&";
                     AddNewUrl += sep + "editorId=" + htmlId;
                     output.Content.SetHtmlContent($@"
-<label class=""col-sm-{LabelColCount} col-form-label col-form-label-sm"">{labelText} {requiredHtml}</label>
-<div class=""col-sm-{EditorColCount}"">
+<label class=""col-{LabelColCount} col-form-label col-form-label-sm"">{labelText} {requiredHtml}</label>
+<div class=""col-{EditorColCount}"">
     <div class=""input-group input-group-sm"">
         {select.GetString()}
         <div class=""input-group-append"">
@@ -368,8 +368,8 @@ $(function () {{
                 else
                 {
                     output.Content.SetHtmlContent($@"
-<label class=""col-sm-{LabelColCount} col-form-label col-form-label-sm"">{labelText} {requiredHtml}</label>
-<div class=""col-sm-{EditorColCount}"">
+<label class=""col-{LabelColCount} col-form-label col-form-label-sm"">{labelText} {requiredHtml}</label>
+<div class=""col-{EditorColCount}"">
     {select.GetString()}
     {metaHtml}
 </div>
