@@ -306,9 +306,9 @@ namespace Buran.Core.MvcLibrary.AdminPanel.Controllers2
                     await TryUpdateModelAsync(org);
                     if (OnEditSaveCheck(org))
                     {
-                        OnEditSaveItem(org);
                         try
                         {
+                            OnEditSaveItem(org);
                             if (await Repo.EditAsync(org))
                             {
                                 OnAfterEditSaveItem(org);
