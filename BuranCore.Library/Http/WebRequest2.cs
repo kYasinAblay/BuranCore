@@ -1,5 +1,8 @@
 ﻿using Buran.Core.Library.Utils;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -25,6 +28,44 @@ namespace Buran.Core.Library.Http
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", token);
             return client;
+        }
+
+
+
+        public string PostData(string url, Dictionary<string, string> data,
+          string authorizationToken = null, string authorizationSchema = "Bearer")
+        {
+            var client = GetClient(authorizationToken, authorizationSchema);
+            var content = new StringContent(data.ToEncode(), Encoding.UTF8);
+            var response = client.PostAsync(url, content).Result;
+            return response.Content.ReadAsStringAsync().Result;
+        }
+
+        public string PostData2(string url, string postData)
+        {
+            var byteArray = Encoding.UTF8.GetBytes(postData);
+            var request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "POST";
+            request.KeepAlive = false;
+            request.ContentLength = byteArray.Length;
+            var dataStream = request.GetRequestStream();
+            dataStream.Write(byteArray, 0, byteArray.Length);
+            dataStream.Close();
+
+            //try
+            //{
+            var response = request.GetResponse();
+            var responseCode = ((HttpWebResponse)response).StatusCode;
+            var reader = new StreamReader(response.GetResponseStream());
+            var responseLine = reader.ReadToEnd();
+            reader.Close();
+            return responseLine;
+            //}
+            //catch (Exception ex)
+            //{
+            //    return LogUtil.Logger.GetErrorMessage(ex);
+            //}
+            //return "error";
         }
 
 
