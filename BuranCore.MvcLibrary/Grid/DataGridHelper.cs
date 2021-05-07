@@ -264,7 +264,7 @@ namespace Buran.Core.MvcLibrary.Grid
                     {
                         var sortFieldName = field.SortField.IsEmpty() ? field.FieldName : field.SortField;
                         var sortImg = sorter.GetSortImg(sortFieldName);
-                        var sortParam = sorter.GetSortParam(sortFieldName);
+                        var sortParam = sorter.GetSortParam(sortFieldName, option.SortDefaultFieldName, option.SortDefaultDirection);
 
                         var url = $@"/{LibGeneral.GetContentUrl(helper.ViewContext.RouteData)}/{option.PagerAndShortAction}{urlOperator}{option.SortKeyword}={sortParam}&{sorter.CleanQueryString}";
 

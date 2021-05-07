@@ -67,17 +67,17 @@ namespace Buran.Core.MvcLibrary.Grid4
                 {
                     if (!option.SortDefaultFieldName.IsEmpty())
                         _sorter.List.Add(new SorterInfo() { Direction = option.SortDefaultDirection, Keyword = option.SortDefaultFieldName });
-                    if (option.SortDefaultFieldNames != null)
-                    {
-                        foreach (string sortinfodefaultname in option.SortDefaultFieldNames)
-                        {
-                            _sorter.List.Add(new SorterInfo()
-                            {
-                                Direction = option.SortDefaultDirection,
-                                Keyword = sortinfodefaultname
-                            });
-                        }
-                    }
+                    //if (option.SortDefaultFieldNames != null)
+                    //{
+                    //    foreach (string sortinfodefaultname in option.SortDefaultFieldNames)
+                    //    {
+                    //        _sorter.List.Add(new SorterInfo()
+                    //        {
+                    //            Direction = option.SortDefaultDirection,
+                    //            Keyword = sortinfodefaultname
+                    //        });
+                    //    }
+                    //}
                 }
                 var sorting = string.Empty;
                 foreach (var info in _sorter.List)
@@ -284,7 +284,7 @@ namespace Buran.Core.MvcLibrary.Grid4
                     {
                         var sortFieldName = field.SortField.IsEmpty() ? field.FieldName : field.SortField;
                         var sortImg = sorter.GetSortImg4(sortFieldName);
-                        var sortParam = sorter.GetSortParam(sortFieldName);
+                        var sortParam = sorter.GetSortParam(sortFieldName, option.SortDefaultFieldName, option.SortDefaultDirection);
 
                         var url = $@"/{LibGeneral.GetContentUrl(helper.ViewContext.RouteData)}/{option.PagerAndShortAction}{urlOperator}{option.SortKeyword}={sortParam}&{sorter.CleanQueryString}";
 

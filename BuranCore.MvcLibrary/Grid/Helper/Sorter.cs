@@ -1,6 +1,5 @@
 ﻿using Buran.Core.Library.Utils;
 using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,13 +15,10 @@ namespace Buran.Core.MvcLibrary.Grid.Helper
     {
         public List<SorterInfo> List { get; set; }
         public string CleanQueryString { get; set; }
-        //private UrlHelper urlHelper { get; set; }
 
         public Sorter(List<KeyValuePair<string, string>> query, string sortKeyword, string pagerAndShortAction)
         {
-            //urlHelper = new UrlHelper(helper.ViewContext);
             List = new List<SorterInfo>();
-
             var sortValueItem = query.FirstOrDefault(d => d.Key == sortKeyword);
             if (!sortValueItem.Value.IsEmpty())
             {
@@ -31,9 +27,7 @@ namespace Buran.Core.MvcLibrary.Grid.Helper
                 {
                     var s = field.Split(' ');
                     if (s.Length == 2)
-                    {
                         List.Add(new SorterInfo { Direction = s[1], Keyword = s[0] });
-                    }
                 }
             }
 
@@ -45,18 +39,11 @@ namespace Buran.Core.MvcLibrary.Grid.Helper
 
             var ci = pagerAndShortAction.Split('?');
             if (ci.Length > 1)
-            {
                 CleanQueryString = CleanQueryString.Replace(ci[1], "");
-            }
             if (CleanQueryString == "?")
-            {
                 CleanQueryString = "";
-            }
-
             if (CleanQueryString.StartsWith("&"))
-            {
                 CleanQueryString = CleanQueryString.Substring(1);
-            }
         }
 
         public string GetSortImg(string fieldName)
@@ -89,39 +76,29 @@ namespace Buran.Core.MvcLibrary.Grid.Helper
             return string.Empty;
         }
 
-        public string GetSortParam(string fieldName)
+        public string GetSortParam(string fieldName, string defaultFieldName, string defaultDirection)
         {
             var str = string.Empty;
             var exits = false;
             foreach (var sortInfo in List)
             {
                 if (!str.IsEmpty())
-                {
                     str += ",";
-                }
-
                 if (sortInfo.Keyword == fieldName)
                 {
                     exits = true;
                     str += sortInfo.Direction == "ASC"
-                           ? fieldName + " DESC"
-                           : sortInfo.Direction == "DESC"
-                                 ? string.Empty
-                                 : fieldName + " ASC";
+                           ? sortInfo.Keyword + " DESC"
+                           : sortInfo.Keyword + " ASC";
                 }
                 else
-                {
                     str += sortInfo.Keyword + " " + sortInfo.Direction;
-                }
             }
             if (!exits)
             {
-                if (!string.IsNullOrWhiteSpace(str))
-                {
-                    str += ",";
-                }
-
-                str += fieldName + " ASC";
+                //if (!string.IsNullOrWhiteSpace(str))
+                //    str += ",";
+                str = fieldName + " ASC";
             }
             return str;
         }

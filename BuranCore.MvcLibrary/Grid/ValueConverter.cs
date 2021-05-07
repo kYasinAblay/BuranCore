@@ -43,7 +43,7 @@ namespace Buran.Core.MvcLibrary.Grid
             return value;
         }
 
-        public static object InspectDataFormat(object item, DataColumn field, string dataFormat = null)
+        public static object InspectDataFormat(IHtmlHelper helper, object item, DataColumn field, string dataFormat = null)
         {
             if (field.EditorType == ColumnTypes.Link)
                 dataFormat = HttpUtility.UrlDecode(dataFormat);
@@ -70,10 +70,33 @@ namespace Buran.Core.MvcLibrary.Grid
                         if (field.FieldName == fieldName)
                         {
                             fieldValue = ValueToLabel(field.ValueConverter, fieldValue);
-                        }
 
-                        var fv = fieldValue != null ? fieldValue.ToString() : string.Empty;
-                        val = val.Replace(m.ToString(), fv);
+                            var valType = fieldValue.GetType();
+                            if (valType.FullName.IndexOf("System.DateTime") > -1)
+                                fieldValue = helper.Encode(DateTime.TryParse(fieldValue.ToString(), out DateTime bVal)
+                                    ? bVal.ToString(field.Format)
+                                    : fieldValue);
+                            else if (valType.FullName.IndexOf("System.Int32") > -1)
+                                fieldValue = helper.Encode(int.TryParse(fieldValue.ToString(), out int bVal)
+                                    ? bVal.ToString(field.Format)
+                                    : fieldValue);
+                            else if (valType.FullName.IndexOf("System.Decimal") > -1)
+                                fieldValue = helper.Encode(decimal.TryParse(fieldValue.ToString(), out decimal bVal)
+                                    ? bVal.ToString(field.Format)
+                                    : fieldValue);
+                            else
+                                fieldValue = field.EditorType == ColumnTypes.Label
+                                    ? helper.Encode(fieldValue.ToString())
+                                    : fieldValue.ToString();
+
+                            var fv = fieldValue != null ? fieldValue.ToString() : string.Empty;
+                            val = val.Replace(m.ToString(), fv);
+                        }
+                        else
+                        {
+                            var fv = fieldValue != null ? fieldValue.ToString() : string.Empty;
+                            val = val.Replace(m.ToString(), fv);
+                        }
                     }
                 }
             }
@@ -89,10 +112,33 @@ namespace Buran.Core.MvcLibrary.Grid
                         if (field.FieldName == fieldName)
                         {
                             fieldValue = ValueToLabel(field.ValueConverter, fieldValue);
-                        }
 
-                        var fv = fieldValue != null ? fieldValue.ToString() : string.Empty;
-                        val = val.Replace(m.ToString(), fv);
+                            var valType = fieldValue.GetType();
+                            if (valType.FullName.IndexOf("System.DateTime") > -1)
+                                fieldValue = helper.Encode(DateTime.TryParse(fieldValue.ToString(), out DateTime bVal)
+                                    ? bVal.ToString(field.Format)
+                                    : fieldValue);
+                            else if (valType.FullName.IndexOf("System.Int32") > -1)
+                                fieldValue = helper.Encode(int.TryParse(fieldValue.ToString(), out int bVal)
+                                    ? bVal.ToString(field.Format)
+                                    : fieldValue);
+                            else if (valType.FullName.IndexOf("System.Decimal") > -1)
+                                fieldValue = helper.Encode(decimal.TryParse(fieldValue.ToString(), out decimal bVal)
+                                    ? bVal.ToString(field.Format)
+                                    : fieldValue);
+                            else
+                                fieldValue = field.EditorType == ColumnTypes.Label
+                                    ? helper.Encode(fieldValue.ToString())
+                                    : val.ToString();
+
+                            var fv = fieldValue != null ? fieldValue.ToString() : string.Empty;
+                            val = val.Replace(m.ToString(), fv);
+                        }
+                        else
+                        {
+                            var fv = fieldValue != null ? fieldValue.ToString() : string.Empty;
+                            val = val.Replace(m.ToString(), fv);
+                        }
                     }
                 }
             }
@@ -115,23 +161,14 @@ namespace Buran.Core.MvcLibrary.Grid
             {
                 var col = field as ImageColumn;
 
-                var valUrl = InspectDataFormat(item, field, col.ImageUrlFormat);
+                var valUrl = InspectDataFormat(helper, item, field, col.ImageUrlFormat);
                 if (valUrl == null)
-                {
                     return r;
-                }
-
                 r += "<img src='" + valUrl + "'";
                 if (col.ImageSize.Height > 0)
-                {
                     r += " height='" + urlEncoder.Encode(col.ImageSize.Height.ToString()) + "'";
-                }
-
                 if (col.ImageSize.Width > 0)
-                {
                     r += " width='" + urlEncoder.Encode(col.ImageSize.Width.ToString()) + "'";
-                }
-
                 r += "/>";
             }
             #endregion
@@ -139,36 +176,27 @@ namespace Buran.Core.MvcLibrary.Grid
             else if (field.EditorType == ColumnTypes.Link)
             {
                 var col = field as LinkColumn;
-                var val = InspectDataFormat(item, field);
+                var val = InspectDataFormat(helper, item, field);
                 if (val == null)
                     return r;
 
-                var valUrl = InspectDataFormat(item, field, col.NavigateUrlFormat);
+                var valUrl = InspectDataFormat(helper, item, field, col.NavigateUrlFormat);
                 if (valUrl == null)
                     return r;
 
-                var label = string.IsNullOrWhiteSpace(col.Text) ? InspectDataFormat(item, field) : col.Text;
+                var label = string.IsNullOrWhiteSpace(col.Text) ? InspectDataFormat(helper, item, field) : col.Text;
 
                 var valType = val.GetType();
                 if (valType.IsEnum)
-                {
                     label = helper.Encode(EnumHelper.GetEnumDisplayText(valType, (int)val));
-                }
                 if (valType.FullName.IndexOf("System.DateTime") > -1)
-                {
                     label = helper.Encode(DateTime.TryParse(val.ToString(), out DateTime bVal) ? bVal.ToString(field.Format) : val);
-                }
 
                 r += "<a href='" + valUrl + "'";
                 if (!string.IsNullOrWhiteSpace(col.Target))
-                {
                     r += " target='" + col.Target + "'";
-                }
                 if (!string.IsNullOrWhiteSpace(col.CssClass))
-                {
                     r += " class='" + col.CssClass + "'";
-                }
-
                 r += ">" + label + "</a>";
             }
             #endregion
@@ -177,7 +205,7 @@ namespace Buran.Core.MvcLibrary.Grid
             {
                 var col = field as CheckBoxColumn;
 
-                var val = InspectDataFormat(item, field);
+                var val = InspectDataFormat(helper, item, field);
                 if (val == null)
                     return r;
 
@@ -193,7 +221,7 @@ namespace Buran.Core.MvcLibrary.Grid
             #endregion
             else
             {
-                var val = InspectDataFormat(item, field);
+                var val = InspectDataFormat(helper, item, field);
                 if (val == null)
                     return r;
 
@@ -209,10 +237,7 @@ namespace Buran.Core.MvcLibrary.Grid
                     {
                         r += "<input type='checkbox' disabled='disabled' value='" + bVal + "'";
                         if (bVal)
-                        {
                             r += " checked='checked'";
-                        }
-
                         r += "/>";
                     }
                     else
@@ -221,21 +246,21 @@ namespace Buran.Core.MvcLibrary.Grid
                     }
                 }
                 else if (valType.FullName.IndexOf("System.DateTime") > -1)
-                {
-                    r = helper.Encode(DateTime.TryParse(val.ToString(), out DateTime bVal) ? bVal.ToString(field.Format) : val);
-                }
+                    r = helper.Encode(DateTime.TryParse(val.ToString(), out DateTime bVal)
+                        ? bVal.ToString(field.Format)
+                        : val);
                 else if (valType.FullName.IndexOf("System.Int32") > -1)
-                {
-                    r = helper.Encode(int.TryParse(val.ToString(), out int bVal) ? bVal.ToString(field.Format) : val);
-                }
+                    r = helper.Encode(int.TryParse(val.ToString(), out int bVal)
+                        ? bVal.ToString(field.Format)
+                        : val);
                 else if (valType.FullName.IndexOf("System.Decimal") > -1)
-                {
-                    r = helper.Encode(decimal.TryParse(val.ToString(), out decimal bVal) ? bVal.ToString(field.Format) : val);
-                }
+                    r = helper.Encode(decimal.TryParse(val.ToString(), out decimal bVal)
+                        ? bVal.ToString(field.Format)
+                        : val);
                 else
-                {
-                    r = field.EditorType == ColumnTypes.Label ? helper.Encode(val.ToString()) : val.ToString();
-                }
+                    r = field.EditorType == ColumnTypes.Label
+                        ? helper.Encode(val.ToString())
+                        : val.ToString();
             }
             return r;
         }

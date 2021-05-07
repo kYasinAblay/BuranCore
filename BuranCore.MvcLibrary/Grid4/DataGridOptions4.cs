@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Html;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using static Buran.Core.MvcLibrary.Grid.DataGridOptions;
 
 namespace Buran.Core.MvcLibrary.Grid4
 {
@@ -91,7 +90,7 @@ namespace Buran.Core.MvcLibrary.Grid4
         public string SortKeyword { get; set; }
         public string SortDirKeyword { get; set; }
         public string SortDefaultFieldName { get; set; }
-        public IEnumerable<string> SortDefaultFieldNames { get; set; }
+        //public IEnumerable<string> SortDefaultFieldNames { get; set; }
         public string SortDefaultDirection { get; set; }
 
         public bool ButtonInsertEnabled { get; set; }
