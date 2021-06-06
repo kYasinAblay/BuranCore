@@ -177,7 +177,7 @@ namespace Buran.Core.MvcLibrary.Grid
             {
                 var col = field as LinkColumn;
                 var val = InspectDataFormat(helper, item, field);
-                if (val == null)
+                if (val == null || val.ToString().IsEmpty())
                     return r;
 
                 var valUrl = InspectDataFormat(helper, item, field, col.NavigateUrlFormat);
