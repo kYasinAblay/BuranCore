@@ -70,25 +70,26 @@ namespace Buran.Core.MvcLibrary.Grid
                         if (field.FieldName == fieldName)
                         {
                             fieldValue = ValueToLabel(field.ValueConverter, fieldValue);
-
-                            var valType = fieldValue.GetType();
-                            if (valType.FullName.IndexOf("System.DateTime") > -1)
-                                fieldValue = helper.Encode(DateTime.TryParse(fieldValue.ToString(), out DateTime bVal)
-                                    ? bVal.ToString(field.Format)
-                                    : fieldValue);
-                            else if (valType.FullName.IndexOf("System.Int32") > -1)
-                                fieldValue = helper.Encode(int.TryParse(fieldValue.ToString(), out int bVal)
-                                    ? bVal.ToString(field.Format)
-                                    : fieldValue);
-                            else if (valType.FullName.IndexOf("System.Decimal") > -1)
-                                fieldValue = helper.Encode(decimal.TryParse(fieldValue.ToString(), out decimal bVal)
-                                    ? bVal.ToString(field.Format)
-                                    : fieldValue);
-                            else
-                                fieldValue = field.EditorType == ColumnTypes.Label
-                                    ? helper.Encode(fieldValue.ToString())
-                                    : fieldValue.ToString();
-
+                            if (fieldValue != null)
+                            {
+                                var valType = fieldValue.GetType();
+                                if (valType.FullName.IndexOf("System.DateTime") > -1)
+                                    fieldValue = helper.Encode(DateTime.TryParse(fieldValue.ToString(), out DateTime bVal)
+                                        ? bVal.ToString(field.Format)
+                                        : fieldValue);
+                                else if (valType.FullName.IndexOf("System.Int32") > -1)
+                                    fieldValue = helper.Encode(int.TryParse(fieldValue.ToString(), out int bVal)
+                                        ? bVal.ToString(field.Format)
+                                        : fieldValue);
+                                else if (valType.FullName.IndexOf("System.Decimal") > -1)
+                                    fieldValue = helper.Encode(decimal.TryParse(fieldValue.ToString(), out decimal bVal)
+                                        ? bVal.ToString(field.Format)
+                                        : fieldValue);
+                                else
+                                    fieldValue = field.EditorType == ColumnTypes.Label
+                                        ? helper.Encode(fieldValue.ToString())
+                                        : fieldValue.ToString();
+                            }
                             var fv = fieldValue != null ? fieldValue.ToString() : string.Empty;
                             val = val.Replace(m.ToString(), fv);
                         }
@@ -112,25 +113,26 @@ namespace Buran.Core.MvcLibrary.Grid
                         if (field.FieldName == fieldName)
                         {
                             fieldValue = ValueToLabel(field.ValueConverter, fieldValue);
-
-                            var valType = fieldValue.GetType();
-                            if (valType.FullName.IndexOf("System.DateTime") > -1)
-                                fieldValue = helper.Encode(DateTime.TryParse(fieldValue.ToString(), out DateTime bVal)
-                                    ? bVal.ToString(field.Format)
-                                    : fieldValue);
-                            else if (valType.FullName.IndexOf("System.Int32") > -1)
-                                fieldValue = helper.Encode(int.TryParse(fieldValue.ToString(), out int bVal)
-                                    ? bVal.ToString(field.Format)
-                                    : fieldValue);
-                            else if (valType.FullName.IndexOf("System.Decimal") > -1)
-                                fieldValue = helper.Encode(decimal.TryParse(fieldValue.ToString(), out decimal bVal)
-                                    ? bVal.ToString(field.Format)
-                                    : fieldValue);
-                            else
-                                fieldValue = field.EditorType == ColumnTypes.Label
-                                    ? helper.Encode(fieldValue.ToString())
-                                    : val.ToString();
-
+                            if (fieldValue != null)
+                            {
+                                var valType = fieldValue.GetType();
+                                if (valType.FullName.IndexOf("System.DateTime") > -1)
+                                    fieldValue = helper.Encode(DateTime.TryParse(fieldValue.ToString(), out DateTime bVal)
+                                        ? bVal.ToString(field.Format)
+                                        : fieldValue);
+                                else if (valType.FullName.IndexOf("System.Int32") > -1)
+                                    fieldValue = helper.Encode(int.TryParse(fieldValue.ToString(), out int bVal)
+                                        ? bVal.ToString(field.Format)
+                                        : fieldValue);
+                                else if (valType.FullName.IndexOf("System.Decimal") > -1)
+                                    fieldValue = helper.Encode(decimal.TryParse(fieldValue.ToString(), out decimal bVal)
+                                        ? bVal.ToString(field.Format)
+                                        : fieldValue);
+                                else
+                                    fieldValue = field.EditorType == ColumnTypes.Label
+                                        ? helper.Encode(fieldValue.ToString())
+                                        : val.ToString();
+                            }
                             var fv = fieldValue != null ? fieldValue.ToString() : string.Empty;
                             val = val.Replace(m.ToString(), fv);
                         }
