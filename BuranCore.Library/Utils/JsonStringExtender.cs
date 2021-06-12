@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using System.Text.Json;
 
 namespace Buran.Core.Library.Utils
 {
@@ -7,19 +6,12 @@ namespace Buran.Core.Library.Utils
     {
         public static string ToJson<T>(this T json) where T : class, new()
         {
-            return JsonConvert.SerializeObject(json);
+            return JsonSerializer.Serialize(json);
         }
 
         public static T ParseJson<T>(this string json) where T : class, new()
         {
-            var jobject = JObject.Parse(json);
-            return JsonConvert.DeserializeObject<T>(jobject.ToString());
-        }
-
-        public static T[] ParseJsonArray<T>(this string json) where T : class, new()
-        {
-            var jobject = JArray.Parse(json);
-            return JsonConvert.DeserializeObject<T[]>(jobject.ToString());
+            return JsonSerializer.Deserialize<T>(json);
         }
     }
 }

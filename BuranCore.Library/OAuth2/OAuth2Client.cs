@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Web;
-using Newtonsoft.Json.Linq;
 using Buran.Core.Library.Utils;
 using Buran.Core.Library.Http;
 using Buran.Core.Library.LogUtil;
@@ -218,13 +217,13 @@ namespace Buran.Core.Library.OAuth
             return resultContent.ParseJson<T>();
         }
 
-        public dynamic GetUserInfo(string accessToken, string tokenType = null, Dictionary<string, string> additionalData = null)
-        {
-            var resultContent = UserData(accessToken, tokenType, additionalData);
+        //public dynamic GetUserInfo(string accessToken, string tokenType = null, Dictionary<string, string> additionalData = null)
+        //{
+        //    var resultContent = UserData(accessToken, tokenType, additionalData);
 
-            dynamic json = JObject.Parse(resultContent);
-            return json;
-        }
+        //    dynamic json = JObject.Parse(resultContent);
+        //    return json;
+        //}
 
         public string GetUserInfo2(string accessToken, string tokenType = null, Dictionary<string, string> additionalData = null)
         {

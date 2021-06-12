@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Buran.Core.MvcLibrary.Utils
 {
@@ -8,7 +8,7 @@ namespace Buran.Core.MvcLibrary.Utils
     {
         public static void Set<T>(this ISession session, string key, T value)
         {
-            session.SetString(key, JsonConvert.SerializeObject(value));
+            session.SetString(key, JsonSerializer.Serialize(value));
         }
 
         public static T Get<T>(this ISession session, string key)
@@ -17,7 +17,7 @@ namespace Buran.Core.MvcLibrary.Utils
 
             return value == null
                 ? default
-                : JsonConvert.DeserializeObject<T>(value);
+                : JsonSerializer.Deserialize<T>(value);
         }
     }
 }

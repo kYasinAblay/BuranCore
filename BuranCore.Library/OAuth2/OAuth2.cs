@@ -104,10 +104,10 @@ namespace Buran.Core.Library.OAuth
             return client.GetUserInfo<T>(accessToken, tokenType);
         }
 
-        public static dynamic GetUserInfo(ClientTypes provider, string accessToken, string tokenType = null)
-        {
-            var client = GetClient(provider);
-            return client.GetUserInfo(accessToken, tokenType);
-        }
+        //public static dynamic GetUserInfo(ClientTypes provider, string accessToken, string tokenType = null)
+        //{
+        //    var client = GetClient(provider);
+        //    return client.GetUserInfo(accessToken, tokenType);
+        //}
     }
 }

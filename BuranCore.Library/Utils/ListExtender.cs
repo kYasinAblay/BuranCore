@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Buran.Core.Library.Utils
@@ -22,7 +21,7 @@ namespace Buran.Core.Library.Utils
 
         public static string GetMd5Hash<T>(this List<T> text)
         {
-            string json = JsonConvert.SerializeObject(text);
+            string json = text.ToJson();
             return json.GetMd5Hash();
         }
     }

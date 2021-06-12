@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Buran.Core.MvcLibrary.Cache
@@ -9,13 +9,13 @@ namespace Buran.Core.MvcLibrary.Cache
     {
         public static async Task SetAsync<T>(IDistributedCache cache, string key, T value)
         {
-            await cache.SetStringAsync(key, JsonConvert.SerializeObject(value));
+            await cache.SetStringAsync(key, JsonSerializer.Serialize(value));
         }
 
         public static async Task<T> GetAsync<T>(IDistributedCache cache, string key)
         {
             var value = await cache.GetStringAsync(key);
-            return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
+            return value == null ? default(T) : JsonSerializer.Deserialize<T>(value);
         }
 
         public static async Task<bool> ExistAsync<T>(IDistributedCache cache, string key)
@@ -32,13 +32,13 @@ namespace Buran.Core.MvcLibrary.Cache
 
         public static void Set<T>(IDistributedCache cache, string key, T value)
         {
-            cache.SetString(key, JsonConvert.SerializeObject(value));
+            cache.SetString(key, JsonSerializer.Serialize(value));
         }
 
         public static T Get<T>(IDistributedCache cache, string key)
         {
             var value = cache.GetString(key);
-            return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
+            return value == null ? default(T) : JsonSerializer.Deserialize<T>(value);
         }
 
         public static bool Exist(IDistributedCache cache, string key)
