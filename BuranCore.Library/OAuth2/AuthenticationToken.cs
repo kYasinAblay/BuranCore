@@ -1,25 +1,26 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace Buran.Core.Library.OAuth
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class AuthenticationToken
     {
-        [JsonPropertyName("access_token")]
+        [JsonProperty(PropertyName = "access_token")]
         public string AccessToken { get; set; }
 
-        [JsonPropertyName("refresh_token")]
+        [JsonProperty(PropertyName = "refresh_token")]
         public string RefreshToken { get; set; }
 
-        [JsonPropertyName("token_type")]
+        [JsonProperty(PropertyName = "token_type")]
         public string TokenType { get; set; }
 
-        [JsonPropertyName("expires_in")]
+        [JsonProperty(PropertyName = "expires_in")]
         public int Expires { get; set; }
 
-        [JsonPropertyName("error")]
+        [JsonProperty(PropertyName = "error")]
         public string Error { get; set; }
 
-        [JsonPropertyName("error_description")]
+        [JsonProperty(PropertyName = "error_description")]
         public string ErrorDesc { get; set; }
     }
 }
