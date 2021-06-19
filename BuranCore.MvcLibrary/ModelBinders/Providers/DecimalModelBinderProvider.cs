@@ -8,13 +8,9 @@ namespace Buran.Core.MvcLibrary.ModelBinders.Providers
         public IModelBinder GetBinder(ModelBinderProviderContext context)
         {
             if (context == null)
-            {
                 throw new ArgumentNullException(nameof(context));
-            }
             if (context.Metadata.UnderlyingOrModelType == typeof(Decimal))
-            {
                 return new DecimalModelBinder();
-            }
             return null;
         }
     }
