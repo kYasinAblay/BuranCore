@@ -80,9 +80,16 @@ namespace Buran.Core.Library.Http
         }
 
         public string PostJson(string url, string data,
-           string authorizationToken = null, string authorizationSchema = "Bearer")
+           string authorizationToken = null, string authorizationSchema = "Bearer",
+           Dictionary<string, string> headerData = null)
         {
             var client = GetClient(authorizationToken, authorizationSchema);
+            if (headerData != null && headerData.Count > 0)
+            {
+                foreach (var hd in headerData)
+                    client.DefaultRequestHeaders.Add(hd.Key, hd.Value);
+            }
+
             var content = new StringContent(data, Encoding.UTF8, "application/json");
             var response = client.PostAsync(url, content).Result;
             return response.Content.ReadAsStringAsync().Result;
