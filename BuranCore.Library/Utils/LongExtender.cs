@@ -14,5 +14,15 @@ namespace Buran.Core.Library.Utils
                                : Math.Round(((double)value) / (1024), 0) + " KB")
                         : value + " B");
         }
+        public static string ToKb(this int value)
+        {
+            return (value > 1024
+                        ? (value > 1024 * 1024
+                               ? (value > 1024 * 1024 * 1024
+                                      ? Math.Round(((double)value) / (1024 * 1024 * 1024), 0) + " GB"
+                                      : Math.Round(((double)value) / (1024 * 1024), 0) + " MB")
+                               : Math.Round(((double)value) / (1024), 0) + " KB")
+                        : value + " B");
+        }
     }
 }
