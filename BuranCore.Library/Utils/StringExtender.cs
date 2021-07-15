@@ -113,13 +113,10 @@ namespace Buran.Core.Library.Utils
             return text.Replace("-html", ".html");
         }
 
-        public static string FirstCharToUpper(this string text)
+        public static string FirstUpper(this string text)
         {
-            if (!string.IsNullOrEmpty(text))
-            {
-                return text.First().ToString(CultureInfo.InvariantCulture).ToUpper() + String.Join("", text.Skip(1));
-            }
-            return text;
+            var a = text.First().ToString().ToUpper() + String.Join("", text.ToLower().Skip(1));
+            return a;
         }
         public static string FirstUpperWord(this string text, string culture = "tr-TR")
         {
@@ -139,6 +136,19 @@ namespace Buran.Core.Library.Utils
         public static bool IsNumeric(this string value)
         {
             return value.All(Char.IsNumber);
+        }
+
+        public static bool IsContainsNumber(this string s)
+        {
+            if (s == null || s == "")
+                return false;
+            for (int i = 0; i < s.Length; i++)
+            {
+                char c = s[i];
+                if (c >= '0' && c <= '9')
+                    return true;
+            }
+            return false;
         }
 
         public static string MakeShort(this string hash)
@@ -247,6 +257,24 @@ namespace Buran.Core.Library.Utils
         public static string MaskCC(this string serial)
         {
             return serial.Substring(0, 6) + "******" + serial.Substring(serial.Length - 4);
+        }
+
+
+
+        public static List<int> GetIntList(this string query)
+        {
+            var list = new List<int>();
+            if (query.IsEmpty())
+                return list;
+
+            var cList = query.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var c in cList)
+            {
+                int.TryParse(c, out int ci);
+                if (ci > 0)
+                    list.Add(ci);
+            }
+            return list;
         }
     }
 }
