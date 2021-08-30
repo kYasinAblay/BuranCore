@@ -21,16 +21,13 @@ namespace Buran.Core.Library.Notification.Push
         public string PushToDevice(string to, string title, string body, bool isContent = false, string data = null)
         {
             if (data.IsEmpty())
-            {
                 data = "";
-            }
-
             var content = isContent ? @"""content_available"": true," : "";
             var postData = $@"
                 {{""to"": ""{to}"", 
                 {content}
                 {data}
-                ""notification"": {{""title"": ""{title}"", ""text"": ""{body}""}}
+                ""notification"": {{""title"": ""{title}"", ""body"": ""{body}""}}
                 }}";
             return Send(postData);
         }
@@ -38,10 +35,7 @@ namespace Buran.Core.Library.Notification.Push
         public string PushDataToDevice(string to, string data)
         {
             if (data.IsEmpty())
-            {
                 data = "";
-            }
-
             var content = @"""content_available"": true,";
             var postData = $@"
                 {{""to"": ""{to}"", 
@@ -54,16 +48,13 @@ namespace Buran.Core.Library.Notification.Push
         public string PushToTopic(string topic, string title, string body, bool isContent = false, string data = null)
         {
             if (data.IsEmpty())
-            {
                 data = "";
-            }
-
             var content = isContent ? @"""content_available"": true," : "";
             var postData = $@"
                 {{""condition"": ""'{topic}' in topics"", 
                 {content}
                 {data}
-                ""notification"": {{""title"": ""{title}"", ""text"": ""{body}""}}
+                ""notification"": {{""title"": ""{title}"", ""body"": ""{body}""}}
                 }}";
             return Send(postData);
         }
@@ -71,10 +62,7 @@ namespace Buran.Core.Library.Notification.Push
         public string PushDataToTopic(string topic, string data)
         {
             if (data.IsEmpty())
-            {
                 data = "";
-            }
-
             var content = @"""content_available"": true,";
             var postData = $@"
                 {{""condition"": ""'{topic}' in topics"", 
