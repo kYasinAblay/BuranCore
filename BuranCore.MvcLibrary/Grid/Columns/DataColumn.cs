@@ -66,5 +66,10 @@ namespace Buran.Core.MvcLibrary.Grid.Columns
         public List<DataValueConverter> ValueConverter { get; set; }
 
         public string DataFormat { get; set; }
+
+
+
+        public string CellBackCssClassFunc { get; set; }
+        public Type CellBackFormatter { get; set; }
     }
 }

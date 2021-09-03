@@ -362,10 +362,10 @@ namespace Buran.Core.MvcLibrary.Grid
             if (option.ButtonEditEnabled)
             {
                 bool drawEditButton;
-                if (option.RowFormatClass != null && !option.ButtonEditShowFunction.IsEmpty())
+                if (option.RowBackFormatter != null && !option.ButtonEditShowFunc.IsEmpty())
                 {
-                    var obj = Activator.CreateInstance(option.RowFormatClass);
-                    var a = option.RowFormatClass.GetMethod(option.ButtonEditShowFunction);
+                    var obj = Activator.CreateInstance(option.RowBackFormatter);
+                    var a = option.RowBackFormatter.GetMethod(option.ButtonEditShowFunc);
                     drawEditButton = (bool)a.Invoke(obj, new dynamic[1] { item });
                 }
                 else
@@ -394,12 +394,12 @@ namespace Buran.Core.MvcLibrary.Grid
             if (option.ButtonDeleteEnabled)
             {
                 bool drawDeleteButton;
-                if (option.RowFormatClass != null && !option.ButtonDeleteShowFunction.IsEmpty())
+                if (option.RowBackFormatter != null && !option.ButtonDeleteShowFunc.IsEmpty())
                 {
-                    var obj = Activator.CreateInstance(option.RowFormatClass);
-                    var a = option.RowFormatClass.GetMethod(option.ButtonDeleteShowFunction);
+                    var obj = Activator.CreateInstance(option.RowBackFormatter);
+                    var a = option.RowBackFormatter.GetMethod(option.ButtonDeleteShowFunc);
                     if (a == null)
-                        throw new Exception("Geçersiz func: " + option.ButtonDeleteShowFunction);
+                        throw new Exception("Geçersiz func: " + option.ButtonDeleteShowFunc);
                     drawDeleteButton = (bool)a.Invoke(obj, new dynamic[1] { item });
                 }
                 else
@@ -460,10 +460,10 @@ namespace Buran.Core.MvcLibrary.Grid
             var keyFieldValue = ValueConverter.GetFieldValue(item, option.KeyField);
             var idx = $" id='tr-{keyFieldValue}'";
             var idclass = "";
-            if (option.RowFormatClass != null && !option.RowFormatFunction.IsEmpty())
+            if (option.RowBackFormatter != null && !option.RowBackCssClassFunc.IsEmpty())
             {
-                var obj = Activator.CreateInstance(option.RowFormatClass);
-                var a = option.RowFormatClass.GetMethod(option.RowFormatFunction);
+                var obj = Activator.CreateInstance(option.RowBackFormatter);
+                var a = option.RowBackFormatter.GetMethod(option.RowBackCssClassFunc);
                 var sonuc = (string)a.Invoke(obj, new dynamic[1] { item });
                 idclass = $" class='{sonuc}'";
             }

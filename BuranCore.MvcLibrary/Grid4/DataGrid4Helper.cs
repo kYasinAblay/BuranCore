@@ -386,10 +386,10 @@ namespace Buran.Core.MvcLibrary.Grid4
             if (option.ButtonEditEnabled)
             {
                 bool drawEditButton;
-                if (option.RowFormatClass != null && !option.ButtonEditShowFunction.IsEmpty())
+                if (option.RowBackFormatter != null && !option.ButtonEditShowFunc.IsEmpty())
                 {
-                    var obj = Activator.CreateInstance(option.RowFormatClass);
-                    var a = option.RowFormatClass.GetMethod(option.ButtonEditShowFunction);
+                    var obj = Activator.CreateInstance(option.RowBackFormatter);
+                    var a = option.RowBackFormatter.GetMethod(option.ButtonEditShowFunc);
                     drawEditButton = (bool)a.Invoke(obj, new dynamic[1] { item });
                 }
                 else
@@ -420,10 +420,10 @@ namespace Buran.Core.MvcLibrary.Grid4
             if (option.ButtonDeleteEnabled)
             {
                 bool drawDeleteButton;
-                if (option.RowFormatClass != null && !option.ButtonDeleteShowFunction.IsEmpty())
+                if (option.RowBackFormatter != null && !option.ButtonDeleteShowFunction.IsEmpty())
                 {
-                    var obj = Activator.CreateInstance(option.RowFormatClass);
-                    var a = option.RowFormatClass.GetMethod(option.ButtonDeleteShowFunction);
+                    var obj = Activator.CreateInstance(option.RowBackFormatter);
+                    var a = option.RowBackFormatter.GetMethod(option.ButtonDeleteShowFunction);
                     if (a == null)
                         throw new Exception("Geçersiz func: " + option.ButtonDeleteShowFunction);
                     drawDeleteButton = (bool)a.Invoke(obj, new dynamic[1] { item });
@@ -489,10 +489,10 @@ namespace Buran.Core.MvcLibrary.Grid4
             var keyFieldValue = ValueConverter.GetFieldValue(item, option.KeyField);
             var idx = $" id='tr-{keyFieldValue}'";
             var idclass = "";
-            if (option.RowFormatClass != null && !option.RowFormatFunction.IsEmpty())
+            if (option.RowBackFormatter != null && !option.RowBackCssClassFunc.IsEmpty())
             {
-                var obj = Activator.CreateInstance(option.RowFormatClass);
-                var a = option.RowFormatClass.GetMethod(option.RowFormatFunction);
+                var obj = Activator.CreateInstance(option.RowBackFormatter);
+                var a = option.RowBackFormatter.GetMethod(option.RowBackCssClassFunc);
                 var sonuc = (string)a.Invoke(obj, new dynamic[1] { item });
                 idclass = $" class='{sonuc}'";
             }
@@ -509,6 +509,14 @@ namespace Buran.Core.MvcLibrary.Grid4
                 var attr = "";
                 if (field.Width > 0)
                     attr += $" width='{field.Width}'";
+
+                if (field.CellBackFormatter != null && !field.CellBackCssClassFunc.IsEmpty())
+                {
+                    var obj = Activator.CreateInstance(field.CellBackFormatter);
+                    var a = field.CellBackFormatter.GetMethod(field.CellBackCssClassFunc);
+                    var sonuc = (string)a.Invoke(obj, new dynamic[1] { item });
+                    field.CellCssClass = sonuc;
+                }
                 if (!field.CellCssClass.IsEmpty())
                     attr += $" class='{field.CellCssClass}'";
                 builder.AppendHtml($"<td{attr}>");

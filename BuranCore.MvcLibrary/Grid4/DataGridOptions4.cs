@@ -90,7 +90,6 @@ namespace Buran.Core.MvcLibrary.Grid4
         public string SortKeyword { get; set; }
         public string SortDirKeyword { get; set; }
         public string SortDefaultFieldName { get; set; }
-        //public IEnumerable<string> SortDefaultFieldNames { get; set; }
         public string SortDefaultDirection { get; set; }
 
         public bool ButtonInsertEnabled { get; set; }
@@ -123,21 +122,28 @@ namespace Buran.Core.MvcLibrary.Grid4
 
         public string KeyField { get; set; }
         public string TextField { get; set; }
-
         public bool FilteringEnabled { get; set; }
 
         public string EmptyData { get; set; }
 
+
+
         public string Popup { get; set; }
         public Size PopupSize { get; set; }
+
+
 
         public List<HtmlString> RowOtherButtons { get; set; }
         public string RowOtherButtonsCss { get; set; }
 
-        public string RowFormatFunction { get; set; }
-        public string ButtonEditShowFunction { get; set; }
+
+
+        public string ButtonEditShowFunc { get; set; }
         public string ButtonDeleteShowFunction { get; set; }
-        public Type RowFormatClass { get; set; }
+        public string RowBackCssClassFunc { get; set; }
+        public Type RowBackFormatter { get; set; }
+
+
 
         public List<int> PageSizeList { get; set; }
         public int DefaultPageSize { get; set; }

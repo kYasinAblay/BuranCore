@@ -143,10 +143,11 @@ namespace Buran.Core.MvcLibrary.Grid
         public List<HtmlString> RowOtherButtons { get; set; }
         public string RowOtherButtonsCss { get; set; }
 
-        public string RowFormatFunction { get; set; }
-        public string ButtonEditShowFunction { get; set; }
-        public string ButtonDeleteShowFunction { get; set; }
-        public Type RowFormatClass { get; set; }
+        
+        public string ButtonEditShowFunc { get; set; }
+        public string ButtonDeleteShowFunc { get; set; }
+        public string RowBackCssClassFunc { get; set; }
+        public Type RowBackFormatter { get; set; }
 
         public List<int> PageSizeList { get; set; }
         public int DefaultPageSize { get; set; }
