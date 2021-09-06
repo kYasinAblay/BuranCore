@@ -480,8 +480,19 @@ namespace Buran.Core.MvcLibrary.Grid
                 var attr = "";
                 if (field.Width > 0)
                     attr += $" width='{field.Width}'";
+
+                if (field.CellBackFormatter != null && !field.CellBackCssClassFunc.IsEmpty())
+                {
+                    var obj = Activator.CreateInstance(field.CellBackFormatter);
+                    var a = field.CellBackFormatter.GetMethod(field.CellBackCssClassFunc);
+                    var sonuc = (string)a.Invoke(obj, new dynamic[1] { item });
+                    if (!field.CellCssClass.IsEmpty())
+                        field.CellCssClass += " ";
+                    field.CellCssClass += sonuc;
+                }
                 if (!field.CellCssClass.IsEmpty())
                     attr += $" class='{field.CellCssClass}'";
+
                 builder.AppendHtml($"<td{attr}>");
                 if (field.ObjectValueFunction.IsEmpty() || field.ObjectValueConverter == null)
                     builder.AppendHtml(ValueConverter.GetValue(helper, item, field));
