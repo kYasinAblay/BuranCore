@@ -487,8 +487,8 @@ namespace Buran.Core.MvcLibrary.Grid
                     var a = field.CellBackFormatter.GetMethod(field.CellBackCssClassFunc);
                     var sonuc = (string)a.Invoke(obj, new dynamic[1] { item });
                     if (!field.CellCssClass.IsEmpty())
-                        field.CellCssClass += " ";
-                    field.CellCssClass += sonuc;
+                        field.CellCssClass = " ";
+                    field.CellCssClass = sonuc;
                 }
                 if (!field.CellCssClass.IsEmpty())
                     attr += $" class='{field.CellCssClass}'";
