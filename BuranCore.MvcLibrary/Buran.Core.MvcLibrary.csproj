@@ -18,10 +18,25 @@
 		<ProjectReference Include="..\BuranCore.Library\Buran.Core.Library.csproj" />
 	</ItemGroup>
 	<ItemGroup>
+		<Compile Update="Resource\Text - Copy.Designer.cs">
+		  <DependentUpon>Text.de.resx</DependentUpon>
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		</Compile>
 		<Compile Update="Resource\Text.Designer.cs">
 			<DesignTime>True</DesignTime>
 			<AutoGen>True</AutoGen>
 			<DependentUpon>Text.resx</DependentUpon>
+		</Compile>
+		<Compile Update="Resource\Text.de.Designer.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>Text.de.resx</DependentUpon>
+		</Compile>
+		<Compile Update="Resource\UI - Copy.Designer.cs">
+		  <DependentUpon>UI.resx</DependentUpon>
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
 		</Compile>
 		<Compile Update="Resource\UI.Designer.cs">
 			<DependentUpon>UI.resx</DependentUpon>
@@ -31,11 +46,19 @@
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Update="Resource\Text.resx">
+		  <LastGenOutput>Text.Designer.cs</LastGenOutput>
+		  <Generator>PublicResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resource\Text.de.resx">
 			<Generator>PublicResXFileCodeGenerator</Generator>
-			<LastGenOutput>Text.Designer.cs</LastGenOutput>
+			<LastGenOutput>Text.de.Designer.cs</LastGenOutput>
 		</EmbeddedResource>
 		<EmbeddedResource Update="Resource\Text.tr.resx">
 			<Generator>ResXFileCodeGenerator</Generator>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Resource\UI.de.resx">
+		  <LastGenOutput>UI.Designer.cs</LastGenOutput>
+		  <Generator>PublicResXFileCodeGenerator</Generator>
 		</EmbeddedResource>
 		<EmbeddedResource Update="Resource\UI.resx">
 			<LastGenOutput>UI.Designer.cs</LastGenOutput>
